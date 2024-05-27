@@ -1,5 +1,483 @@
-#hello {
-    background-color: red;
-    color: blue;
-    font-size: 10rem;
+*, *::after, *::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+:root {
+    --saya-orange: #f47224;
+}
+
+.container {
+    width: 100svw;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar styles -- START */
+#navbar {
+    width: 100%;
+    padding-block: 1rem;
+    padding-inline: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+#navContents {
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#navbar::after {
+    /* For shadow on bottom */
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 0 1px 1.2px rgba(0, 0, 0, 0.1);
+    z-index: -1;
+}
+
+.logo {}
+
+.logo img {
+    height: 5rem;
+}
+
+.illustration {
+    --triangle-height: 1rem;
+    position: absolute;
+    right: 0;
+    width: 60%;
+}
+
+.triangle {
+    height: var(--triangle-height);
+    background-color: var(--saya-orange);
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.ball {
+    background-color: var(--saya-orange);
+    border-radius: 100%;
+    aspect-ratio: 1;
+    position: absolute;
+    top: calc(var(--triangle-height) / 2);
+    transform: translateY(-50%);
+}
+
+#ball-1 {
+    left: 0rem;
+    height: 0.5rem;
+}
+
+#ball-2 {
+    left: 0.8rem;
+    height: 0.7rem;
+}
+
+#ball-3 {
+    left: 1.8rem;
+    height: 1rem;
+}
+
+/* Navbar styles -- END */
+
+
+
+/* Main Content Body Styles -- START */
+#main {
+    flex: 1;
+    width: 100%;
+}
+
+.credentials {
+    padding-inline: 1rem;
+    margin-inline: auto;
+    margin-bottom: 3rem;
+}
+
+.credentials .info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.credentials h4 {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 2%;
+}
+
+.name, .phone {
+    display: flex;
+    gap: 0.4rem;
+    align-items: baseline;
+    font-weight: 300;
+    color: rgb(91, 91, 91);
+}
+
+.name .label, .phone .label, .uploadDate .label {
+    font-size: 0.9rem;
+}
+
+.name .data {
+    font-weight: 600;
+    color: black;
+    font-size: 1.2rem;
+}
+
+.phone .data {
+    font-weight: 400;
+    color: black;
+}
+
+.uploadDate {
+    color: rgb(91, 91, 91);
+}
+
+.uploadDate .data {
+    text-align: center;
+    font-weight: 600;
+    color: rgb(60, 60, 60);
+}
+
+.pharmacistInfo {
+    width: 100%;
+    padding-inline: 1rem;
+    background-color: #1984c2;
+    color: white;
+    padding-block: 1.5rem;
+}
+
+.pharmacistInfo .info {
+    margin-inline: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pharmacist {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+.pharmacist .data {
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.dateOfTranscription {
+    display: flex;
+    align-items: baseline;
+    font-weight: 300;
+    font-size: 1rem;
+}
+
+.medList {
+    min-height: 20rem;
+}
+
+.medList .row, .medList header {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1.5fr;
+}
+
+.medList header {
+    margin-top: 1rem;
+}
+
+.sayacareSubstitute, .dcHeading {
+    width: max-content;
+    height: max-content;
+    margin-block: auto 0.3rem;
+    margin-inline: auto;
+    font-size: 0.9rem;
+    padding-inline: 1rem;
+    display: flex;
+    gap: 0.2rem;
+}
+
+.sayacareSubstitute {
+    background-color: lightgreen;
+}
+
+.dcHeading {
+    background-color: yellow;
+}
+
+.col1, .col3 {
+    background-color: rgb(235, 233, 233);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    padding: 1rem;
+}
+
+.brandName span {
+    color: rgb(153, 153, 153);
+}
+
+.col2 {
+    font-size: 0.9rem;
+    background-color: rgb(246, 215, 156);
+    position: relative;
+}
+
+.compSavings {
+    display: flex;
+    justify-content: space-between;
+    height: max-content;
+}
+
+.comp {
+    padding: 0.4rem;
+}
+
+.totalSavings, .price {
+    background-color: #555555;
+    color: white;
+    text-align: center;
+    font-size: 0.7rem;
+    padding: 0.4rem;
+    line-height: 0.8rem;
+    font-weight: 300;
+}
+
+.price {
+    margin-left: 0.5rem;
+    width: max-content;
+}
+
+.freqAdvice {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    background-color: rgb(252, 252, 252);
+}
+
+.contactInfo {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 10%;
+    position: relative;
+}
+
+.contactInfo::after {
+    /* For shadow on bottom */
+    content: "";
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 0 1px 1.2px rgba(0, 0, 0, 0.1);
+    z-index: -1;
+}
+
+.iconText {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.icon {
+    background-color: var(--saya-orange);
+    color: white;
+    border-radius: 100%;
+    aspect-ratio: 1;
+    height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon svg {
+    aspect-ratio: 1;
+    height: 70%;
+}
+
+.text {
+    font-size: 0.9rem;
+    color: rgb(71, 71, 71);
+}
+
+/* Main Content Body Styles -- END */
+
+
+/* Footer Content Styles - START */
+footer {
+    margin-top: 5rem;
+}
+
+.note {
+    width: 100%;
+    background-color: #f6f6f6;
+    font-size: 0.9rem;
+    color: #323335;
+}
+
+.note .info {
+    padding: 1rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    gap: 1rem;
+}
+
+.notePts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.notePt {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.noteColorBox {
+    aspect-ratio: 1;
+    height: 1.5rem;
+}
+
+.noteColorBox#green {
+    background-color: #82c341;
+}
+
+.noteColorBox#yellow {
+    background-color: #f9ed1e;
+}
+
+.noteTxt {
+    text-align: justify;
+}
+
+.howToOrder {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    padding-inline: 1rem;
+    font-weight: 200;
+    position: relative;
+    width: max-content;
+    margin-inline: auto;
+    margin-bottom: 1rem;
+}
+
+.howToOrder .dot {
+    aspect-ratio: 1;
+    height: 1rem;
+    background-color: black;
+    border-radius: 100%;
+}
+
+.howToOrder .txt {
+    font-weight: 500;
+}
+
+.howToOrder::before, .howToOrder::after {
+    content: "";
+    position: absolute;
+    background-color: black;
+    aspect-ratio: 1;
+    height: 0.4rem;
+    border-radius: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.howToOrder::before {
+    left: -0.1rem;
+}
+
+.howToOrder::after {
+    right: -0.1rem;
+}
+
+/* Footer Content Styles - END */
+
+
+
+/* Utility Classes */
+.max-w-7xl {
+    max-width: 80rem;
+}
+
+/* Responsive Styles */
+
+/* small screens */
+@media (min-width: 640px) {
+    #navbar {
+        padding-inline: 1.5rem;
+    }
+}
+
+/* medium screens */
+@media (min-width: 768px) {
+    #navbar {
+        padding-block: 1.25rem;
+    }
+
+    .logo img {
+        height: 6rem;
+    }
+
+    .illustration {
+        --triangle-height: 2rem;
+    }
+
+    .note .info {
+        grid-template-columns: 1fr 3fr;
+    }
+}
+
+/* large screens */
+@media (min-width: 1024px) {
+    #navbar {
+        padding-inline: 1.5rem;
+    }
+
+    .credentials {
+        margin-bottom: 4rem;
+    }
+
+    .credentials, .pharmacistInfo {
+        padding-inline: 0;
+    }
+
+    .medList .row, .medList header {
+        grid-template-columns: 2fr 4fr 1fr;
+    }
+
+    .note .info {
+        grid-template-columns: 1fr 4fr;
+    }
+}
+
+/* extra large screens */
+@media (min-width: 1280px) {
+    .note .info {
+        grid-template-columns: 1fr 9fr;
+    }
+}
+
+/* 2x large screens */
+@media (min-width: 1536px) {
+
 }
