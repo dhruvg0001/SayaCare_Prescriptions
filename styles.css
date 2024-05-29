@@ -9,6 +9,13 @@
     --saya-orange: #f47224;
 }
 
+.actionBtns {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
 .container {
     width: 100svw;
     height: 100svh;
@@ -185,7 +192,11 @@
 }
 
 .medList {
-    min-height: 20rem;
+    margin-bottom: 3rem;
+}
+
+.row + .row {
+    margin-top: 3rem;
 }
 
 .medList .row, .medList header {
@@ -265,6 +276,7 @@
     top: 100%;
     right: 0;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     padding: 0.3rem;
     font-size: 0.8rem;
     background-color: rgb(252, 252, 252);
@@ -416,7 +428,7 @@ footer {
 
 /* Utility Classes */
 .max-w-7xl {
-    max-width: 80rem;
+    max-width: 75rem;
 }
 
 /* Responsive Styles */
