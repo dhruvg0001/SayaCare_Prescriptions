@@ -22,7 +22,9 @@
 
 <body>
     <div class="actionBtns">
-        <button onclick="extractPdf()">Export Pdf</button>
+        <button class="exportBtn" title="Click to download as PDF">
+            <span>Download</span> <img src="assets/download_icon.svg" alt="Export PDF" />
+        </button>
     </div>
 
     <div class="container">
@@ -65,8 +67,8 @@
                 </div>
             </div>
 
-            <div class="pharmacistInfo">
-                <div class="info max-w-7xl">
+            <div class="pharmacistInfo max-w-7xl">
+                <div class="info">
                     <div class="pharmacist">
                         <div class="label">Parchi Transcribed By: </div>
                         <div class="data">Pharmacist <span id="pharmacistName">Neha</span></div>
@@ -77,74 +79,49 @@
             </div>
 
             <!-- Medicine List -->
-            <div class="medList">
+            <div class="medList max-w-7xl">
                 <header>
-                  <div></div>  
-                  <div class="sayacareSubstitute">SAYACARE SUBSTITUTE <sup>*</sup></div>  
-                  <div class="dcHeading">DRUG CODE <sup>*</sup></div>  
+                  <div></div> 
+                  <div class="col23">  
+                    <div class="col2">
+                        <span class="sayacareSubstitute">SAYACARE SUBSTITUTE <sup>*</sup></span>
+                    </div>  
+                    <div class="col3">
+                        <span class="dcHeading">DRUG CODE <sup>*</sup></span>
+                    </div>  
+                  </div>
                 </header>
 
+                <!-- List of meds here are dynamically injected -->
+                <!-- Put a skeleton loaded instead of this. -->
                 <main class="row">
                     <div class="col1">
-                        <div class="brandName">1. Atrovakind 20mg <span class="mrp">(MRP 43)</span></div>
+                        <div class="brandName">TEST MED <span class="mrp">(MRP 43)</span></div>
                     </div>
-
-                    <div class="col2">
-                        <div class="compSavings">
-                            <div class="comp">Atorvastatin 20mg</div>
+            
+                    <div class="col23">
+                        <div class="col2">
                             <div class="totalSavings">Total Savings <div>80%</div></div>
+            
+                            <div class="convGenericItem">
+                                <div class="comp">Atorvastatin 20mg</div>
+                                <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
+                                <div class="freqAdvice"><span id="advice">2</span> times in a day * <span id="freq">7</span> days</div>
+                            </div>
+            
+                            <div class="convGenericItem">
+                                <div class="comp">Atorvastatin 20mg</div>
+                                <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
+                                <div class="freqAdvice"><span id="advice">2</span> times in a day * <span id="freq">7</span> days</div>
+                            </div>
                         </div>
-
-                        <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
-
-                        <div class="freqAdvice"><span id="advice">2</span> times in a data * <span id="freq">7</span> days</div>
-                    </div>
-
-                    <div class="col3">
-                        <div class="drugCode">72</div>
-                    </div>
-                </main>
-
-                <main class="row">
-                    <div class="col1">
-                        <div class="brandName">1. Atrovakind 20mg <span class="mrp">(MRP 43)</span></div>
-                    </div>
-
-                    <div class="col2">
-                        <div class="compSavings">
-                            <div class="comp">Atorvastatin 20mg</div>
-                            <div class="totalSavings">Total Savings <div>80%</div></div>
+            
+                        <div class="col3">
+                            <div class="drugCode">72</div>
+                            <div class="drugCode">72</div>
                         </div>
-
-                        <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
-
-                        <div class="freqAdvice"><span id="advice">2</span> times in a data * <span id="freq">7</span> days</div>
                     </div>
-
-                    <div class="col3">
-                        <div class="drugCode">72</div>
-                    </div>
-                </main>
-                
-                <main class="row">
-                    <div class="col1">
-                        <div class="brandName">1. Atrovakind 20mg <span class="mrp">(MRP 43)</span></div>
-                    </div>
-
-                    <div class="col2">
-                        <div class="compSavings">
-                            <div class="comp">Atorvastatin 20mg</div>
-                            <div class="totalSavings">Total Savings <div>80%</div></div>
-                        </div>
-
-                        <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
-
-                        <div class="freqAdvice"><span id="advice">2</span> times in a data * <span id="freq">7</span> days</div>
-                    </div>
-
-                    <div class="col3">
-                        <div class="drugCode">72</div>
-                    </div>
+            
                 </main>
             </div>
 
@@ -198,7 +175,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Javascript Logic -->
-    <script src="index.js"></script>
+    <script type="module" src="index.js"></script>
 </body>
 
 </html>

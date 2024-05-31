@@ -7,13 +7,40 @@
 
 :root {
     --saya-orange: #f47224;
+    --col23-gap: 0.2rem;
 }
 
 .actionBtns {
     position: fixed;
-    top: 0;
-    left: 0;
+    bottom: 1rem;
+    right: 1rem;
     z-index: 10;
+}
+
+.exportBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    border-radius: 1rem;
+    opacity: 0.2;
+    transition: opacity 0.5s ease;
+}
+
+.exportBtn:hover {
+    opacity: 1;
+}
+
+.exportBtn span {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.exportBtn img {
+    width: 3rem;
 }
 
 .container {
@@ -49,8 +76,10 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    box-shadow: 0 0 1px 1.2px rgba(0, 0, 0, 0.1);
     z-index: -1;
+    height: 0.14rem;
+    background: rgba(0, 0, 0, 0.1);
+
 }
 
 .logo {}
@@ -160,6 +189,7 @@
 .pharmacistInfo {
     width: 100%;
     padding-inline: 1rem;
+    margin-inline: auto;
     background-color: #1984c2;
     color: white;
     padding-block: 1.5rem;
@@ -192,6 +222,7 @@
 }
 
 .medList {
+    margin-inline: auto;
     margin-bottom: 3rem;
 }
 
@@ -201,7 +232,7 @@
 
 .medList .row, .medList header {
     display: grid;
-    grid-template-columns: 2fr 3fr 1.5fr;
+    grid-template-columns: 2fr 4.5fr;
 }
 
 .medList header {
@@ -209,14 +240,15 @@
 }
 
 .sayacareSubstitute, .dcHeading {
-    width: max-content;
-    height: max-content;
     margin-block: auto 0.3rem;
-    margin-inline: auto;
-    font-size: 0.9rem;
-    padding-inline: 1rem;
     display: flex;
     gap: 0.2rem;
+    width: max-content;
+    margin-inline: auto;
+    padding: 0.2rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #232323;
 }
 
 .sayacareSubstitute {
@@ -227,33 +259,62 @@
     background-color: yellow;
 }
 
-.col1, .col3 {
-    background-color: rgb(235, 233, 233);
+.col1 {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
     padding: 1rem;
+    background-color: rgb(235, 233, 233);
+}
+
+.col1.empty {
+    background-color: transparent;
+}
+
+.brandName {
+    text-align: center;
 }
 
 .brandName span {
     color: rgb(153, 153, 153);
 }
 
-.col2 {
-    font-size: 0.9rem;
-    background-color: rgb(246, 215, 156);
-    position: relative;
+.col23 {
+    display: flex;
+    width: 100%;
 }
 
-.compSavings {
+.col2 {
+    flex: 5;
+    font-size: 0.9rem;
+    position: relative;
     display: flex;
-    justify-content: space-between;
-    height: max-content;
+    flex-direction: column;
+    gap: var(--col23-gap);
+}
+
+.totalSavings {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.convGenericItem {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(246, 215, 156);
+    height: 100%;
+}
+
+/* NOTE: Shouldn't be extended to take up entire space as they might be overlapped by the Total Savings div */
+.comp, .price {
+    max-width: 80%;
 }
 
 .comp {
     padding: 0.4rem;
+    padding-bottom: 0;
 }
 
 .totalSavings, .price {
@@ -268,18 +329,40 @@
 
 .price {
     margin-left: 0.5rem;
+    margin-bottom: 0.2rem;
     width: max-content;
 }
 
 .freqAdvice {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin-left: auto;
+    margin-top: auto;
+    width: max-content;
+    text-align: right;
     padding: 0.3rem;
     font-size: 0.8rem;
     background-color: rgb(252, 252, 252);
+    position: absolute;
+    right: 2px;
+    bottom: -2rem;
+}
+
+.col3 {
+    display: flex;
+    font-size: 0.9rem;
+    flex-direction: column;
+    flex: 1;
+    gap: var(--col23-gap);
+}
+
+.col3 > div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(235, 233, 233);
 }
 
 .contactInfo {
@@ -296,7 +379,8 @@
     top: 1rem;
     left: 0;
     width: 100%;
-    box-shadow: 0 0 1px 1.2px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
+    height: 0.15rem;
     z-index: -1;
 }
 
@@ -469,12 +553,8 @@ footer {
         margin-bottom: 4rem;
     }
 
-    .credentials, .pharmacistInfo {
-        padding-inline: 0;
-    }
-
     .medList .row, .medList header {
-        grid-template-columns: 2fr 4fr 1fr;
+        grid-template-columns: 2fr 5fr;
     }
 
     .note .info {
