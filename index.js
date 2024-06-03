@@ -115,9 +115,6 @@ function handleGenericMeds(generic_order) {
             generic_order[dc] = { ...origObj, ...invObj };
         }
     })
-    console.log("____________")
-    console.log("GENERIC MEDS");
-    console.log(generic_order)
 
     const genericMeds = []; // Array after processing and extracting requiured information
     Object.keys(generic_order).forEach(dc => {
@@ -131,7 +128,7 @@ function handleGenericMeds(generic_order) {
             obj['rate'] = Number(origObj['price']) * origObj['quantity'];
         }
         obj['packet'] = origObj['packet_digit'] + ' ' + origObj['packet_size'];
-        obj['dosageText'] = convertDosageToText({
+        obj['dosageText'] = formatDosageFreqAdviceText({
             advice: origObj['advice'],
             frequency: origObj['frequency'],
             dosage: origObj['dosage']
@@ -139,7 +136,6 @@ function handleGenericMeds(generic_order) {
 
         genericMeds.push(obj);
     })
-    console.log(genericMeds)
 
     // ADD THE GENERIC ITEMS TO THE DOM
 
@@ -236,7 +232,10 @@ function handleConversionMeds(conversions) {
                 const obj = {};
                 obj['drugCode'] = dc;
                 obj['composition'] = capitaliseComposition(genericConvItems[dc].f_comp);
-                const rate = Math.ceil(Number(genericConvItems[dc].price) * Number(genericConvItems[dc].packet_digit));
+                let rate = Math.ceil(Number(genericConvItems[dc].price));
+                if(genericConvItems[dc].method === 'Tablet/Capsule') {
+                    rate *= Number(genericConvItems[dc].packet_digit);
+                }
                 obj['rate'] = '₹' + rate;
                 totalGenericRate += rate;
                 obj['packet'] = genericConvItems[dc].packet_digit + " " + genericConvItems[dc].packet_size;
@@ -255,7 +254,10 @@ function handleConversionMeds(conversions) {
 
 
         // CONVERT DOSAGES TO HUMAN UNDERSTABLE TEXT LIKE: BD ---> 1 tablet 2 times a day.
-        convObj['dosageText'] = convertDosageToText(conversions[brandName].Dosage);
+        convObj['dosageText'] = formatDosageFreqAdviceText({
+            // Add frequency, advice -- NEED TO CONFIRM THE KEY NAMES FOR THESE
+            dosage: conversions[brandName].Dosage
+        });
 
         convertedMeds.push(convObj);
     })
@@ -321,7 +323,7 @@ function handleConversionMeds(conversions) {
 
                 <div class="col23">
                     <div class="col2">
-                        <div class="totalSavings">Total Savings <div>${convMed.totalSavings}</div></div>
+                        ${!convMed.totalSavings ? '' : `<div class="totalSavings">Total Savings <div>${convMed.totalSavings}</div></div>`}
                         
                         ${convGenericItemDivs}
                     </div>
@@ -378,10 +380,13 @@ function capitaliseComposition(composition) {
     return words.join(" + ");
 }
 
-function convertDosageToText(dosage) {
-    if (!dosage) return '';
-    if (typeof dosage === 'string') {
-        // For branded items, in the form of "OD", "TDS", "BD", "1-0-0"
+function formatDosageFreqAdviceText(infoObj) {
+    if(!infoObj) return "";
+
+    let {dosage, advice, frequency} = infoObj;
+    
+    const strs = [];
+    if (dosage) {
         dosage = dosage.toLowerCase();
         if (!isNaN(Number(dosage[0]))) {
             // 1-0-0, 1-0-1-2 form
@@ -414,23 +419,15 @@ function convertDosageToText(dosage) {
             }
             return dosageToText[dosage];
         }
-    } else {
-        // For generic items, in the form of
-        // {
-        //     frequency: 1,
-        //     advice: 1, 
-        //     dosage: 1,
-        // }
-        const strs = [];
-        if (dosage.dosage) {
-            strs.push(`${dosage.dosage} ${dosage.dosage == '1' ? 'tablet' : 'tablets'}`);
-        }
-        if (dosage.frequency) {
-            strs.push(`every ${dosage.frequency} ${dosage.frequency == '1' ? 'day' : 'days'}`);
-        }
-        if (dosage.advice) {
-            strs.push(`for ${dosage.advice} ${dosage.advice == '1' ? 'day' : 'days'}`);
-        }
-        return strs.length > 0 ? 'Take ' + strs.join(', ') : undefined;
     }
+
+    if (frequency) {
+        strs.push(`every ${frequency} ${frequency == '1' ? 'day' : 'days'}`);
+    }
+
+    if (advice) {
+        strs.push(`for ${advice} ${advice == '1' ? 'day' : 'days'}`);
+    }
+
+    return strs.length > 0 ? 'Take ' + strs.join(', ') : undefined;
 }

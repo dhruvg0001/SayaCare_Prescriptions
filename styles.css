@@ -232,10 +232,10 @@
 
 .medList .row, .medList header {
     display: grid;
-    grid-template-columns: 2fr 4.5fr;
 }
 
 .medList header {
+    display: none;
     margin-top: 1rem;
 }
 
@@ -269,7 +269,7 @@
 }
 
 .col1.empty {
-    background-color: transparent;
+    display: none;
 }
 
 .brandName {
@@ -303,18 +303,15 @@
 .convGenericItem {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     background-color: rgb(246, 215, 156);
     height: 100%;
+    padding: 0.4rem;
 }
 
 /* NOTE: Shouldn't be extended to take up entire space as they might be overlapped by the Total Savings div */
 .comp, .price {
     max-width: 80%;
-}
-
-.comp {
-    padding: 0.4rem;
-    padding-bottom: 0;
 }
 
 .totalSavings, .price {
@@ -328,8 +325,6 @@
 }
 
 .price {
-    margin-left: 0.5rem;
-    margin-bottom: 0.2rem;
     width: max-content;
 }
 
@@ -540,6 +535,19 @@ footer {
 
     .note .info {
         grid-template-columns: 1fr 3fr;
+    }
+
+    .col1.empty {
+        display: grid;
+        background-color: transparent;
+    }
+
+    .medList header {
+        display: grid;
+    }
+
+    .medList .row, .medList header {
+        grid-template-columns: 2fr 4.5fr;
     }
 }
 
