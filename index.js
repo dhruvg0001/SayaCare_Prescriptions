@@ -22,8 +22,12 @@ function extractPdf() {
     const navbarDiv = document.getElementById('navbar').cloneNode(true);
     const mainDiv = document.getElementById('main').cloneNode(true);
     const footerDiv = document.getElementById('footer').cloneNode(true);
-
-    // const realContainerDiv = document.querySelector('.container');
+    
+    // The place order button is NOT NEEDED in the extracted pdf
+    const placeOrderDiv = mainDiv.querySelector(".placeOrder");
+    if(placeOrderDiv) {
+        mainDiv.removeChild(placeOrderDiv);
+    }
 
     // Add the following divs to our temporary container div
     const tempContainerDiv = document.createElement('div');
@@ -74,26 +78,39 @@ getPrescription()
 
 function populateView(data) {
     // Add name, phone number
-    let { name, phone_number, TOC, TOP, transcriber, conversions, generic_order } = data;
+    let { name, phone_number, TOC, TOP, transcriber, conversions, generic_order, id } = data;
     if (!name) {
         name = 'N/A';
     }
     const namePhoneDiv = document.querySelector('.namePhone');
-    namePhoneDiv.querySelector('.name').querySelector('.data').innerText = name;
-    namePhoneDiv.querySelector('.phone').querySelector('.data').innerText = phone_number;
+
+    const nameDiv = namePhoneDiv.querySelector('.name').querySelector('.data');
+    nameDiv.innerText = name;
+    if(name === 'N/A') {
+        nameDiv.classList.add('unavailable');
+    }
+
+    if(phone_number.startsWith('+91')) {
+        namePhoneDiv.querySelector('.phone').querySelector('.data').innerText = `+91 ${phone_number.substring(3)}`;
+    } else {
+        namePhoneDiv.querySelector('.phone').querySelector('.data').innerText = `+91 ${phone_number}`;
+    }
 
     // Add the date of upload
     const dateUpload = formatDateFromTimestamp(TOC);
     const uploadDateDiv = document.querySelector('.uploadDate');
     uploadDateDiv.querySelector('.data').innerText = dateUpload;
 
-    // Add pharmacist name, date of transcribing
+    // Add pharmacist name, parchi ID, date of transcribing
     const pharmacistNameSpan = document.getElementById('pharmacistName');
-    pharmacistNameSpan.innerText = transcriber.split('@')[0];
+    pharmacistNameSpan.innerText = transcriber.split('@')[0]; 
+    
+    const parchiIdSpan = document.getElementById('parchiId');
+    parchiIdSpan.innerText = id;
 
     const dateTranscribe = formatDateFromTimestamp(TOP);
     const dateOfTranscriptionDiv = document.querySelector('.dateOfTranscription');
-    dateOfTranscriptionDiv.innerText = dateTranscribe;
+    dateOfTranscriptionDiv.innerHTML = `On <span>${dateTranscribe}</span>`;
 
     // Clear any skeleton loaded/dummy medlist html scripts
     document.querySelectorAll('.medList main').forEach(mainDiv => {
@@ -103,6 +120,15 @@ function populateView(data) {
     if (conversions) handleConversionMeds(conversions);
 
     if (generic_order) handleGenericMeds(generic_order);
+
+    if(conversions || generic_order) { // something is present in med orders
+        // add the PLACE ORDER button as well
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        placeOrderBtn.addEventListener('click', () => {
+            // this will redirect to the deeplink
+            alert("PLACED ORDER");
+        })
+    }
 }
 
 function handleGenericMeds(generic_order) {
@@ -138,47 +164,18 @@ function handleGenericMeds(generic_order) {
     })
 
     // ADD THE GENERIC ITEMS TO THE DOM
-
-    // CREATE SOMETHING LIST THIS
-    // <main class="row">
-    //     <div class="col1">
-    //     </div>
-
-    //     <div class="col23">
-    //         <div class="col2">
-
-    //             <div class="convGenericItem">
-    //                 <div class="comp">Atorvastatin 20mg</div>
-    //                 <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
-    //                 <div class="freqAdvice"><span id="advice">2</span> times in a day * <span id="freq">7</span> days</div>
-    //             </div>
-
-    //             <div class="convGenericItem">
-    //                 <div class="comp">Atorvastatin 20mg</div>
-    //                 <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
-    //                 <div class="freqAdvice"><span id="advice">2</span> times in a day * <span id="freq">7</span> days</div>
-    //             </div>
-    //         </div>
-
-    //         <div class="col3">
-    //             <div class="drugCode">72</div>
-    //             <div class="drugCode">72</div>
-    //         </div>
-    //     </div>
-
-    // </main>
+    
     let mainDivs = "";
     genericMeds.forEach((genMed) => {
         const mainDiv = `
                 <main class="row">
-                    <div class="col1 empty">
-                    </div>
+                    <div class="col1"><div class="brandName unavailable">N/A</div></div>
         
                     <div class="col23">
                         <div class="col2">
                             <div class="convGenericItem">
-                                <div class="comp">${genMed.composition}</div>
-                                <div class="price">Price: ₹<span id="rate">${genMed.rate}</span> for <span id="unitMethod">${genMed.packet}</span></div>
+                                <div class="compUnit"><span id="comp">${genMed.composition}</span> | <span id="unitMethod">${genMed.packet}</span></div>
+                                <div class="price">₹&nbsp;<span id="rate">${genMed.rate}</span>/-</div>
                                 ${genMed.dosageText ? `<div class="freqAdvice">${genMed['dosageText']}</div>` : ''}
                             </div>
                         </div>
@@ -218,7 +215,7 @@ function handleConversionMeds(conversions) {
         convObj['composition'] = comp;
 
         let brandedPrice = Math.ceil(Number(conversions[brandName].Price))
-        convObj['MRP'] = conversions[brandName].Price ? '₹' + Math.ceil(Number(conversions[brandName].Price)) : 'N/A';
+        convObj['MRP'] = conversions[brandName].Price ? Math.ceil(Number(conversions[brandName].Price)) : 'N/A';
         if (convObj['MRP'] === 'N/A') {
             brandedPrice = 'N/A';
         }
@@ -236,7 +233,7 @@ function handleConversionMeds(conversions) {
                 if(genericConvItems[dc].method === 'Tablet/Capsule') {
                     rate *= Number(genericConvItems[dc].packet_digit);
                 }
-                obj['rate'] = '₹' + rate;
+                obj['rate'] = rate;
                 totalGenericRate += rate;
                 obj['packet'] = genericConvItems[dc].packet_digit + " " + genericConvItems[dc].packet_size;
 
@@ -264,36 +261,7 @@ function handleConversionMeds(conversions) {
 
     // ADD THE BRANDED ITEMS TO THE DOM
 
-    // CREATE SOMETHING LIST THIS
-    // <main class="row">
-    //     <div class="col1">
-    //         <div class="brandName">1. Atrovakind 20mg <span class="mrp">(MRP 43)</span></div>
-    //     </div>
-
-    //     <div class="col23">
-    //         <div class="col2">
-    //             <div class="totalSavings">Total Savings <div>80%</div></div>
-
-    //             <div class="convGenericItem">
-    //                 <div class="comp">Atorvastatin 20mg</div>
-    //                 <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
-    //                 <div class="freqAdvice"><span id="advice">2</span> times in a day * <span id="freq">7</span> days</div>
-    //             </div>
-
-    //             <div class="convGenericItem">
-    //                 <div class="comp">Atorvastatin 20mg</div>
-    //                 <div class="price">Price: ₹<span id="rate">80</span> for <span id="unitMethod">3 tablets</span></div>
-    //                 <div class="freqAdvice"><span id="advice">2</span> times in a day * <span id="freq">7</span> days</div>
-    //             </div>
-    //         </div>
-
-    //         <div class="col3">
-    //             <div class="drugCode">72</div>
-    //             <div class="drugCode">72</div>
-    //         </div>
-    //     </div>
-
-    // </main>
+    // Create and push the HTML script to our index.html
     let mainDivs = "";
     convertedMeds.forEach((convMed, idx) => {
         let convGenericItemDivs = "";
@@ -301,10 +269,10 @@ function handleConversionMeds(conversions) {
         convMed.convItems.forEach((genericItem, idx) => {
             convGenericItemDivs += `
                 <div class="convGenericItem">
-                    <div class="comp">${genericItem.composition}</div>
-                    <div class="price">Price: <span id="rate">${genericItem.rate}</span> for <span id="unitMethod">${genericItem.packet}</span></div>
+                    <div class="compUnit"><span id="comp">${genericItem.composition}</span> | <span id="unitMethod">${genericItem.packet}</span></div>
+                    <div class="price">₹&nbsp;<span id="rate">${genericItem.rate}</span>/-</div>
+                    ${idx === convMed.convItems.length - 1 && convMed.dosageText ? `<div class="freqAdvice">${convMed['dosageText']}</div>` : ''}
                 </div>
-                ${idx === convMed.convItems.length - 1 && convMed.dosageText ? `<div class="freqAdvice">${convMed['dosageText']}</div>` : ''}
             `
         })
 
@@ -318,19 +286,26 @@ function handleConversionMeds(conversions) {
         const mainDiv = `
             <main class="row">
                 <div class="col1">
-                    <div class="brandName">${idx + 1}. ${convMed.composition} <span class="mrp">(MRP ${convMed.MRP})</span></div>
+                    <div class="brandName">${convMed.composition} <span class="mrp ${convMed.MRP === 'N/A' ? 'unavailable' : '' }">(${convMed.MRP !== 'N/A' ? '₹&nbsp;' + convMed.MRP + '/-' : 'N/A'})</span></div>
                 </div>
 
                 <div class="col23">
-                    <div class="col2">
-                        ${!convMed.totalSavings ? '' : `<div class="totalSavings">Total Savings <div>${convMed.totalSavings}</div></div>`}
-                        
-                        ${convGenericItemDivs}
-                    </div>
+                    ${
+                        !convGenericItemDivs 
+                        ? '<div class="unavailable">Conversion not available/Schedule X- not for sale</div>'
+                        : `
+                            <div class="col2">
+                                ${!convMed.totalSavings || convMed.totalSavings === 'N/A' ? 'Conversion not available/Schedule X- not for sale' : `<div class="totalSavings"><div>${convMed.totalSavings}</div> Saved</div>`}
+                                
+                                ${convGenericItemDivs}
+                            </div>
 
-                    <div class="col3">
-                        ${convGenericDrugCodeDivs}
-                    </div>
+                            <div class="col3">
+                                ${convGenericDrugCodeDivs}
+                            </div>
+                        `
+                    }
+                    
                 </div>
 
             </main>
@@ -351,15 +326,10 @@ function formatDateFromTimestamp(timestamp) {
     timestamp = Number(timestamp);
     const dateObj = new Date(timestamp);
     const date = dateObj.getDate();
-    const month = dateObj.getMonth();
+    const month = dateObj.getMonth() + 1; // be default 0-indexed
     const year = dateObj.getFullYear();
 
-    const months = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-
-    return `${date < 10 ? '0' + date : date}-${months[month]}-${year}`;
+    return `${date < 10 ? '0' + date : date}/${month < 10 ? '0' + month : month}/${year}`;
 }
 
 function capitaliseComposition(composition) {
