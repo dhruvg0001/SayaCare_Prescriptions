@@ -41,7 +41,6 @@ export function clearStorage() {
 }
 
 export async function checkCache() {
-    console.log("IN CHECK CACHE")
     try {
         let cacheList = getItem('inventory');
         if(!cacheList) {
@@ -70,7 +69,6 @@ export async function checkCache() {
 
 // Function to fetch inventory(product list) from backend and restore in cache
 async function cacheInventory() {
-    console.log("IN CACHE")
     try {
         const url = `https://saya.net.in/api/jam2-trade_names/full`;
         const response = await fetch(url);

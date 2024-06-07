@@ -42,7 +42,7 @@ function extractPdf() {
     // Convert screen dimensions to jsPDF units (pixels)
     const pdfWidth = screenWidth;
 
-    const pdfSizeFormat = pdfWidth <= 640 ? 'a5' : 'b4';
+    const pdfSizeFormat = pdfWidth <= 640 ? 'a5' : 'c3';
 
     var options = {
         margin: [20, 20, 20, 20],
@@ -75,8 +75,6 @@ async function getPrescription() {
         },
     });
     const data = await response.json();
-
-    console.log("API DATA: ", data);
 
     if (data['data'] && data['data'].length > 0) {
         populateView(data['data'][0]);
