@@ -132,9 +132,7 @@ function populateView(data) {
     });
 
     if (conversions) handleConversionMeds(conversions);
-    if (conversions) handleConversionMeds(conversions);
 
-    if (generic_order) handleGenericMeds(generic_order);
     if (generic_order) handleGenericMeds(generic_order);
 
     if(conversions || generic_order) { // something is present in med orders
