@@ -240,6 +240,7 @@ function handleConversionMeds(conversions) {
         if (genericConvItems) {
             let totalGenericRate = 0;
             Object.keys(genericConvItems).forEach(dc => {
+                if(!genericConvItems[dc]) return;
                 const obj = {};
                 obj['drugCode'] = dc;
                 obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
