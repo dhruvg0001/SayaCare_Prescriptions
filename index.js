@@ -3,8 +3,9 @@ import { checkCache } from './localStorageUtils.js';
 /**
  * REQUIED HTML ELEMENTS
  */
-const medListDiv = document.querySelector('.medList');
-
+const dataReadySection = document.getElementById('data-ready')
+const dataNotReadySection = document.getElementById('data-not-ready')
+const medListDiv = dataReadySection.querySelector('.medList');
 
 // Check if inventory cache is available
 let inventoryByDC = {};
@@ -77,10 +78,12 @@ async function getPrescription() {
     const data = await response.json();
 
     if (data['data'] && data['data'].length > 0) {
+        // After Data is finished fetching - hide the NOT READY section and show the READY section
+        dataNotReadySection.style.display = 'none';
+        dataReadySection.style.display = 'block';
         populateView(data['data'][0]);
     }
 }
-getPrescription()
 
 function populateView(data) {
     // Add name, phone number
@@ -329,7 +332,6 @@ function handleConversionMeds(conversions) {
     medListDiv.insertAdjacentHTML('beforeend', mainDivs);
 }
 
-
 /** Bunch of Utility Functions */
 
 function formatDateFromTimestamp(timestamp) {
@@ -431,3 +433,13 @@ async function getTranscriber(transcriber, pharmacistNameSpan) {
         }
     }
 }
+
+// MAIN DRIVER FUNCTION
+function main() {
+    // Initially show loader/data not ready screen and hide the data ready screen
+    dataNotReadySection.style.display = 'block';
+    dataReadySection.style.display = 'none';
+
+    getPrescription();
+}
+main();

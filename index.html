@@ -21,166 +21,358 @@
 </head>
 
 <body>
-    <div class="actionBtns">
-        <button class="exportBtn" title="Click to download as PDF">
-            <span>Download</span> <img src="assets/download_icon.svg" alt="Export PDF" />
-        </button>
-    </div>
+    <section id="data-not-ready">
+        <div class="container">
 
-    <div class="container">
-
-        <nav id="navbar">
-            <div id="navContents" class="max-w-7xl">
-                <div class="rxImg">
-                    <img src="assets/rx_image.png" alt="Rx logo">
-                </div>
-                <div class="logo">
-                    <img src="assets/SayaCareNewLogo.png" alt="SayaCare Logo">
-                </div>
-            </div>
-        </nav>
-
-        <main id="main">
-
-            <div class="credentials">
-                <div class="info max-w-7xl">
-                    <div class="namePhone">
-                        <div class="name">
-                            <div class="label">Patient Name:</div>
-                            <div class="data">Jane Doe</div>
-                        </div>
-
-                        <div class="phone">
-                            <div class="label">Ph No.:</div>
-                            <div class="data">+91 9999999999</div>
-                        </div>
+            <nav id="navbar">
+                <div id="navContents" class="max-w-7xl">
+                    <div class="rxImg">
+                        <img src="assets/rx_image.png" alt="Rx logo">
                     </div>
-
-                    <div class="uploadDate">
-                        <div class="label">Parchi Upload Date</div>
-                        <div class="data">22/03/2024</div>
+                    <div class="logo">
+                        <img src="assets/SayaCareNewLogo.png" alt="SayaCare Logo">
                     </div>
                 </div>
-            </div>
+            </nav>
 
-            <div class="pharmacistInfo">
-                <div class="info max-w-7xl">
-                    <div class="pharmacistParchiId">
-                        <div class="pharmacist">
-                            <span class="label">Parchi Transcribed By </span>
-                            <span class="data"><span id="pharmacistName">Neha</span> (Pharmacist)</s>
-                        </div>
+            <main id="main">
 
-                        <div class="parchiId">
-                            <span class="label">Parchi ID - </span>
-                            <span class="data"><span id="parchiId">12345</span>
-                        </div>
-                    </div>
-    
-                    <div class="dateOfTranscription">On <span>23/04/2024</span></div>
-                </div>
-            </div>
-
-            <!-- Medicine List -->
-            <div class="medList max-w-7xl">
-                <header>
-                  <div class="col1">
-                    <span class="brandName">Brand Name</span>
-                  </div> 
-                  <div class="col23">  
-                    <div class="col2">
-                        <span class="sayacareSubstitute">SayaCare Tested Conversion</span>
-                    </div>  
-                    <div class="col3">
-                        <span class="dcHeading">Drug Code</span>
-                    </div>  
-                  </div>
-                </header>
-
-                <!-- List of meds here are dynamically injected -->
-                <!-- Put a skeleton loaded instead of this. -->
-                <main class="row">
-                    <div class="col1">
-                        <div class="brandName">TEST MED <span class="mrp">(₹&nbsp;43/-)</span></div>
-                    </div>
-            
-                    <div class="col23">
-                        <div class="col2">
-                            <div class="totalSavings"><div>80%</div> Saved</div>
-            
-                            <div class="convGenericItem">
-                                <div class="compUnit"><span id="comp">Atorvastatin 20mg</span> | <span id="unitMethod">3 tablets</span></div>
-                                <div class="price">₹&nbsp;<span id="rate">80</span>/-</div>
+                <div class="credentials">
+                    <div class="info max-w-7xl">
+                        <div class="namePhone">
+                            <div class="name">
+                                <div class="label">Patient Name:</div>
+                                <div class="data">
+                                    <span class="skeleton-loader"></span>
+                                </div>
                             </div>
 
-                            <div class="convGenericItem">
-                                <div class="compUnit"><span id="comp">Atorvastatin 20mg</span> | <span id="unitMethod">3 tablets</span></div>
-                                <div class="price">₹&nbsp;<span id="rate">80</span>/-</div>
-                                <div class="freqAdvice"><span id="advice">2</span> times in a day * <span id="freq">7</span> days</div>
+                            <div class="phone">
+                                <div class="label">Ph No.:</div>
+                                <div class="data"><span class="skeleton-loader"></span></div>
                             </div>
                         </div>
-            
-                        <div class="col3">
-                            <div class="drugCode">72</div>
-                            <div class="drugCode">72</div>
+
+                        <div class="uploadDate">
+                            <div class="label">Parchi Upload Date</div>
+                            <div class="data"><span class="skeleton-loader"></span></div>
                         </div>
                     </div>
-            
-                </main>
-            </div>
-
-            <div class="placeOrder max-w-7xl"><a id="placeOrderBtn" href="" target="_blank">PLACE ORDER</a></div>
-        </main>
-
-        <footer id="footer">
-            <div class="note">
-                <div class="info max-w-7xl">
-                    <span>Note:</span>
-                    <ul class="notePts">
-                        <li class="notePt">SayaCare medicines are given by composition/salt & drug code, and not by any brand name</li>
-                        <li class="notePt">सायाकेयर दवाएं संरचना और दवा कोड द्वारा दी जाती हैं, न कि किसी ब्रांड नाम से</li>
-
-                        <br>
-
-                        <li class="notePt">These substitutes are Safe, Tested at govt approved labs, and affordable</li>
-                        <li class="notePt">ये दवाएँ सुरक्षित हैं, सरकार द्वारा अनुमोदित प्रयोगशालाओं में परीक्षण की गई हैं और सस्ती हैं</li>
-
-                        <br>
-
-                        <li class="notePt">To see medicine test report, visit our app or website, and search medicine by drug code and see report</li>
-                        <li class="notePt">दवा परीक्षण रिपोर्ट देखने के लिए हमारे ऐप या वेबसाइट पर जाएं और दवा कोड के आधार पर दवा खोजें और रिपोर्ट देखें</li>
-
-                        <br>
-
-                        <li class="notePt">Some of the medicines are missing in the parchi: these names were unclear or substitute are unavailable for them. For these medicines, share a photo with customer support or via app.</li>
-                        <li class="notePt">पर्चियों में कुछ दवाएँ गायब हैं: ये नाम अस्पष्ट थे या उनके लिए विकल्प उपलब्ध नहीं हैं। इन दवाओं के लिए, ग्राहक सहायता के साथ या ऐप के माध्यम से एक फोटो साझा करें।</li>
-                    </ul>
                 </div>
-            </div>
 
-            <div class="contactInfo">
-                <div class="iconText">
-                    <div class="icon">
-                        <img src="assets/phone_missed.svg" alt="Phone Missed Icon" />
-                    </div> 
-                    <div class="text">+91 7669149677</div>
+                <div class="pharmacistInfo">
+                    <div class="info max-w-7xl">
+                        <div class="pharmacistParchiId">
+                            <div class="pharmacist">
+                                <span class="label">Parchi Transcribed By </span>
+                                <span class="data"><span class="skeleton-loader"></span></s>
+                            </div>
+
+                            <div class="parchiId">
+                                <span class="label">Parchi ID - </span>
+                                <span class="data"><span class="skeleton-loader"></span></span>
+                            </div>
+                        </div>
+
+                        <div class="dateOfTranscription">On <span class="skeleton-loader"></span></div>
+                    </div>
+                </div>
+
+                <!-- Medicine List -->
+                <div class="medList max-w-7xl">
+                    <header>
+                        <div class="col1">
+                            <span class="brandName">Brand Name</span>
+                        </div>
+                        <div class="col23">
+                            <div class="col2">
+                                <span class="sayacareSubstitute">SayaCare Tested Conversion</span>
+                            </div>
+                            <div class="col3">
+                                <span class="dcHeading">Drug Code</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- List of meds here are dynamically injected -->
+                    <!-- Put a skeleton loaded instead of this. -->
+                    <main class="row">
+                        <div class="col1">
+                            <div class="brandName"><span class="skeleton-loader"></span></div>
+                        </div>
+
+                        <div class="col23">
+                            <div class="col2">
+                                <div class="convGenericItem">
+                                    <span class="skeleton-loader"></span>
+                                </div>
+
+                                <div class="convGenericItem">
+                                    <span class="skeleton-loader"></span>
+                                </div>
+                            </div>
+
+                            <div class="col3">
+                                <div class="drugCode"><span class="skeleton-loader"></span></div>
+                                <div class="drugCode"><span class="skeleton-loader"></span></div>
+                            </div>
+                        </div>
+
+                    </main>
                 </div>
                 
-                <div class="iconText">
-                    <div class="icon">
-                        <img src="assets/captive_portal.svg" alt="Globe Icon" />                 
-                    </div> 
-                    <div class="text">https://saya.net.in/</div>
+            </main>
+
+            <footer id="footer">
+                <div class="note">
+                    <div class="info max-w-7xl">
+                        <span>Note:</span>
+                        <ul class="notePts">
+                            <li class="notePt">SayaCare medicines are given by composition/salt & drug code, and not by
+                                any
+                                brand name</li>
+                            <li class="notePt">सायाकेयर दवाएं संरचना और दवा कोड द्वारा दी जाती हैं, न कि किसी ब्रांड नाम
+                                से
+                            </li>
+
+                            <br>
+
+                            <li class="notePt">These substitutes are Safe, Tested at govt approved labs, and affordable
+                            </li>
+                            <li class="notePt">ये दवाएँ सुरक्षित हैं, सरकार द्वारा अनुमोदित प्रयोगशालाओं में परीक्षण की
+                                गई
+                                हैं और सस्ती हैं</li>
+
+                            <br>
+
+                            <li class="notePt">To see medicine test report, visit our app or website, and search
+                                medicine by
+                                drug code and see report</li>
+                            <li class="notePt">दवा परीक्षण रिपोर्ट देखने के लिए हमारे ऐप या वेबसाइट पर जाएं और दवा कोड
+                                के
+                                आधार पर दवा खोजें और रिपोर्ट देखें</li>
+
+                            <br>
+
+                            <li class="notePt">Some of the medicines are missing in the parchi: these names were unclear
+                                or
+                                substitute are unavailable for them. For these medicines, share a photo with customer
+                                support or via app.</li>
+                            <li class="notePt">पर्चियों में कुछ दवाएँ गायब हैं: ये नाम अस्पष्ट थे या उनके लिए विकल्प
+                                उपलब्ध
+                                नहीं हैं। इन दवाओं के लिए, ग्राहक सहायता के साथ या ऐप के माध्यम से एक फोटो साझा करें।
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </footer>
-    </div>
 
-    <!-- HTML2Pdf library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <div class="contactInfo">
+                    <div class="iconText">
+                        <div class="icon">
+                            <img src="assets/phone_missed.svg" alt="Phone Missed Icon" />
+                        </div>
+                        <div class="text">+91 7669149677</div>
+                    </div>
 
-    <!-- Javascript Logic -->
-    <script type="module" src="index.js"></script>
+                    <div class="iconText">
+                        <div class="icon">
+                            <img src="assets/captive_portal.svg" alt="Globe Icon" />
+                        </div>
+                        <div class="text">https://saya.net.in/</div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+
+    <section id="data-ready">
+        <div class="actionBtns">
+            <button class="exportBtn" title="Click to download as PDF">
+                <span>Download</span> <img src="assets/download_icon.svg" alt="Export PDF" />
+            </button>
+        </div>
+
+        <div class="container">
+
+            <nav id="navbar">
+                <div id="navContents" class="max-w-7xl">
+                    <div class="rxImg">
+                        <img src="assets/rx_image.png" alt="Rx logo">
+                    </div>
+                    <div class="logo">
+                        <img src="assets/SayaCareNewLogo.png" alt="SayaCare Logo">
+                    </div>
+                </div>
+            </nav>
+
+            <main id="main">
+
+                <div class="credentials">
+                    <div class="info max-w-7xl">
+                        <div class="namePhone">
+                            <div class="name">
+                                <div class="label">Patient Name:</div>
+                                <div class="data">Jane Doe</div>
+                            </div>
+
+                            <div class="phone">
+                                <div class="label">Ph No.:</div>
+                                <div class="data">+91 9999999999</div>
+                            </div>
+                        </div>
+
+                        <div class="uploadDate">
+                            <div class="label">Parchi Upload Date</div>
+                            <div class="data">22/03/2024</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pharmacistInfo">
+                    <div class="info max-w-7xl">
+                        <div class="pharmacistParchiId">
+                            <div class="pharmacist">
+                                <span class="label">Parchi Transcribed By </span>
+                                <span class="data"><span id="pharmacistName">Neha</span> (Pharmacist)</s>
+                            </div>
+
+                            <div class="parchiId">
+                                <span class="label">Parchi ID - </span>
+                                <span class="data"><span id="parchiId">12345</span>
+                            </div>
+                        </div>
+
+                        <div class="dateOfTranscription">On <span>23/04/2024</span></div>
+                    </div>
+                </div>
+
+                <!-- Medicine List -->
+                <div class="medList max-w-7xl">
+                    <header>
+                        <div class="col1">
+                            <span class="brandName">Brand Name</span>
+                        </div>
+                        <div class="col23">
+                            <div class="col2">
+                                <span class="sayacareSubstitute">SayaCare Tested Conversion</span>
+                            </div>
+                            <div class="col3">
+                                <span class="dcHeading">Drug Code</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- List of meds here are dynamically injected -->
+                    <!-- Put a skeleton loaded instead of this. -->
+                    <main class="row">
+                        <div class="col1">
+                            <div class="brandName">TEST MED <span class="mrp">(₹&nbsp;43/-)</span></div>
+                        </div>
+
+                        <div class="col23">
+                            <div class="col2">
+                                <div class="totalSavings">
+                                    <div>80%</div> Saved
+                                </div>
+
+                                <div class="convGenericItem">
+                                    <div class="compUnit"><span id="comp">Atorvastatin 20mg</span> | <span
+                                            id="unitMethod">3
+                                            tablets</span></div>
+                                    <div class="price">₹&nbsp;<span id="rate">80</span>/-</div>
+                                </div>
+
+                                <div class="convGenericItem">
+                                    <div class="compUnit"><span id="comp">Atorvastatin 20mg</span> | <span
+                                            id="unitMethod">3
+                                            tablets</span></div>
+                                    <div class="price">₹&nbsp;<span id="rate">80</span>/-</div>
+                                    <div class="freqAdvice"><span id="advice">2</span> times in a day * <span
+                                            id="freq">7</span> days</div>
+                                </div>
+                            </div>
+
+                            <div class="col3">
+                                <div class="drugCode">72</div>
+                                <div class="drugCode">72</div>
+                            </div>
+                        </div>
+
+                    </main>
+                </div>
+
+                <div class="placeOrder max-w-7xl"><a id="placeOrderBtn" href="" target="_blank">PLACE ORDER</a></div>
+            </main>
+
+            <footer id="footer">
+                <div class="note">
+                    <div class="info max-w-7xl">
+                        <span>Note:</span>
+                        <ul class="notePts">
+                            <li class="notePt">SayaCare medicines are given by composition/salt & drug code, and not by
+                                any
+                                brand name</li>
+                            <li class="notePt">सायाकेयर दवाएं संरचना और दवा कोड द्वारा दी जाती हैं, न कि किसी ब्रांड नाम
+                                से
+                            </li>
+
+                            <br>
+
+                            <li class="notePt">These substitutes are Safe, Tested at govt approved labs, and affordable
+                            </li>
+                            <li class="notePt">ये दवाएँ सुरक्षित हैं, सरकार द्वारा अनुमोदित प्रयोगशालाओं में परीक्षण की
+                                गई
+                                हैं और सस्ती हैं</li>
+
+                            <br>
+
+                            <li class="notePt">To see medicine test report, visit our app or website, and search
+                                medicine by
+                                drug code and see report</li>
+                            <li class="notePt">दवा परीक्षण रिपोर्ट देखने के लिए हमारे ऐप या वेबसाइट पर जाएं और दवा कोड
+                                के
+                                आधार पर दवा खोजें और रिपोर्ट देखें</li>
+
+                            <br>
+
+                            <li class="notePt">Some of the medicines are missing in the parchi: these names were unclear
+                                or
+                                substitute are unavailable for them. For these medicines, share a photo with customer
+                                support or via app.</li>
+                            <li class="notePt">पर्चियों में कुछ दवाएँ गायब हैं: ये नाम अस्पष्ट थे या उनके लिए विकल्प
+                                उपलब्ध
+                                नहीं हैं। इन दवाओं के लिए, ग्राहक सहायता के साथ या ऐप के माध्यम से एक फोटो साझा करें।
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="contactInfo">
+                    <div class="iconText">
+                        <div class="icon">
+                            <img src="assets/phone_missed.svg" alt="Phone Missed Icon" />
+                        </div>
+                        <div class="text">+91 7669149677</div>
+                    </div>
+
+                    <div class="iconText">
+                        <div class="icon">
+                            <img src="assets/captive_portal.svg" alt="Globe Icon" />
+                        </div>
+                        <div class="text">https://saya.net.in/</div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
 </body>
+
+<!-- HTML2Pdf library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Javascript Logic -->
+<script type="module" src="index.js"></script>
 
 </html>
