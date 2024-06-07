@@ -13,16 +13,10 @@ checkCache().then(inv => {
     inventoryByDC = inv;
 });
 
-// Add a click listener to the Download PDF button
-const exportButton = document.querySelector(".exportBtn");
-exportButton.addEventListener('click', () => {
-    extractPdf();
-})
-
 function extractPdf() {
-    const navbarDiv = document.getElementById('navbar').cloneNode(true);
-    const mainDiv = document.getElementById('main').cloneNode(true);
-    const footerDiv = document.getElementById('footer').cloneNode(true);
+    const navbarDiv = dataReadySection.querySelector('#navbar').cloneNode(true);
+    const mainDiv = dataReadySection.querySelector('#main').cloneNode(true);
+    const footerDiv = dataReadySection.querySelector('#footer').cloneNode(true);
     
     // The place order button is NOT NEEDED in the extracted pdf
     const placeOrderDiv = mainDiv.querySelector(".placeOrder");
@@ -43,7 +37,7 @@ function extractPdf() {
     // Convert screen dimensions to jsPDF units (pixels)
     const pdfWidth = screenWidth;
 
-    const pdfSizeFormat = pdfWidth <= 640 ? 'a5' : 'c3';
+    const pdfSizeFormat = pdfWidth <= 640 ? 'a5' : 'b3';
 
     var options = {
         margin: [20, 20, 20, 20],
@@ -81,6 +75,13 @@ async function getPrescription() {
         // After Data is finished fetching - hide the NOT READY section and show the READY section
         dataNotReadySection.style.display = 'none';
         dataReadySection.style.display = 'block';
+
+        // Add a click listener to the Download PDF button
+        const exportButton = document.querySelector(".exportBtn");
+        exportButton.addEventListener('click', () => {
+            extractPdf();
+        })
+
         populateView(data['data'][0]);
     }
 }
@@ -131,7 +132,9 @@ function populateView(data) {
     });
 
     if (conversions) handleConversionMeds(conversions);
+    if (conversions) handleConversionMeds(conversions);
 
+    if (generic_order) handleGenericMeds(generic_order);
     if (generic_order) handleGenericMeds(generic_order);
 
     if(conversions || generic_order) { // something is present in med orders
