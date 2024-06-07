@@ -8,7 +8,7 @@
 :root {
     --saya-orange: #f47224;
     --col23-gap: 0.2rem;
-    --column-gap: 1rem;
+    --column-gap: 0.2rem;
     --text-light-grey: #626262;
     --text-dark-grey: #242424;
     --bg-dark-grey: #D9D9D9;
@@ -75,6 +75,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 90%;
 }
 
 #navbar::after {
@@ -118,6 +119,7 @@
     display: flex;
     justify-content: space-between;
     margin-inline: auto;
+    width: 90%;
 }
 
 .name, .phone {
@@ -165,6 +167,7 @@
     margin-inline: auto;
     display: flex;
     justify-content: space-between;
+    width: 90%;
 }
 
 .pharmacist .data {
@@ -187,6 +190,7 @@
     margin-bottom: 3rem;
     display: flex;
     flex-direction: column;
+    width: 90%;
 }
 
 .row {
@@ -287,6 +291,7 @@ div.brandName {
 
 .col23 .unavailable {
     width: 100%;
+    min-height: 4rem;
     background-color: #F5F5F5;
     display: flex;
     justify-content: center;
@@ -321,6 +326,7 @@ div.brandName {
 .convGenericItem {
     display: flex;
     justify-content: space-between;
+    gap: 0.5rem;
     align-items: center;
     height: 100%;
     padding: 1rem;
@@ -338,7 +344,7 @@ div.brandName {
 }
 
 .price {
-    margin-right: 10%;
+    margin-right: 20%;
     width: max-content;
 }
 
@@ -423,6 +429,7 @@ div.brandName {
 .placeOrder {
     margin-inline: auto;
     display: flex;
+    width: 90%;
 }
 
 #placeOrderBtn {
@@ -437,6 +444,10 @@ div.brandName {
     color: white;
     border-radius: 1.125rem;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
 /* Main Content Body Styles -- END */
@@ -458,6 +469,7 @@ footer {
     padding: 1rem;
     margin-inline: auto;
     gap: 1rem;
+    width: 90%;
 }
 
 .notePts {
@@ -494,6 +506,10 @@ footer {
 
 /* medium screens */
 @media (min-width: 768px) {
+    :root {
+        --column-gap: 1rem;
+    }
+
     .logo img {
         height: 6rem;
     }
@@ -521,6 +537,10 @@ footer {
 
     .medList .row, .medList header {
         grid-template-columns: 2fr 5fr;
+    }
+
+    .price {
+        margin-right: 10%;
     }
 }
 

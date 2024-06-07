@@ -99,11 +99,15 @@ function populateView(data) {
     // Add the date of upload
     const dateUpload = formatDateFromTimestamp(TOC);
     const uploadDateDiv = document.querySelector('.uploadDate');
-    uploadDateDiv.querySelector('.data').innerText = dateUpload;
+    uploadDateDiv.querySelector('.data').innerHTML = dateUpload;
 
     // Add pharmacist name, parchi ID, date of transcribing
     const pharmacistNameSpan = document.getElementById('pharmacistName');
-    pharmacistNameSpan.innerText = transcriber.split('@')[0]; 
+    if(!transcriber) {
+        pharmacistNameSpan.innerHTML = `<span class='unavailable'>N/A</span>`
+    } else {
+        getTranscriber(transcriber, pharmacistNameSpan);
+    }
     
     const parchiIdSpan = document.getElementById('parchiId');
     parchiIdSpan.innerText = id;
@@ -124,10 +128,12 @@ function populateView(data) {
     if(conversions || generic_order) { // something is present in med orders
         // add the PLACE ORDER button as well
         const placeOrderBtn = document.getElementById('placeOrderBtn');
-        placeOrderBtn.addEventListener('click', () => {
-            // this will redirect to the deeplink
-            alert("PLACED ORDER");
-        })
+        placeOrderBtn.href = `https://saya.net.in/deeplink?param1=myprescriptions&param2=${id}`;
+        // placeOrderBtn.addEventListener('click', () => {
+        //     // this will redirect to the deeplink
+        //     alert("PLACED ORDER");
+        // })
+        
     }
 }
 
@@ -320,6 +326,7 @@ function handleConversionMeds(conversions) {
 /** Bunch of Utility Functions */
 
 function formatDateFromTimestamp(timestamp) {
+    if(!timestamp) return `<span class='unavailable'>N/A</span>`
     if (timestamp.length === 10) {
         timestamp += '000';
     }
@@ -400,4 +407,20 @@ function formatDosageFreqAdviceText(infoObj) {
     }
 
     return strs.length > 0 ? 'Take ' + strs.join(', ') : undefined;
+}
+
+async function getTranscriber(transcriber, pharmacistNameSpan) {
+    // get via API
+    const url = `https://samasya.tech/api/staff/info/${transcriber}`;
+    const apiRes = await fetch(url);
+    const res = await apiRes.json();
+    if(!res['success']) {
+        pharmacistNameSpan.innerHTML = `<span class='unavailable'>N/A</span>`
+    } else {
+        if(!res['data'] || res['data'].length === 0) {
+            pharmacistNameSpan.innerHTML = `<span class='unavailable'>N/A</span>`   
+        } else {
+            pharmacistNameSpan.innerHTML = res['data'][0]['name']
+        }
+    }
 }
