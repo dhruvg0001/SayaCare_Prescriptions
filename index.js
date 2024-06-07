@@ -36,11 +36,19 @@ function extractPdf() {
     tempContainerDiv.appendChild(mainDiv);
     tempContainerDiv.appendChild(footerDiv);
 
+    // Get screen dimensions
+    const screenWidth = window.innerWidth;
+
+    // Convert screen dimensions to jsPDF units (pixels)
+    const pdfWidth = screenWidth;
+
+    const pdfSizeFormat = pdfWidth <= 640 ? 'a5' : 'b4';
+
     var options = {
         margin: [20, 20, 20, 20],
         filename: "prescription.pdf",
         image: { type: 'jpeg', quality: 1 },
-        jsPDF: { unit: 'px', format: 'b3', orientation: 'portrait', hotfixes: ['px_scaling'] },
+        jsPDF: { unit: 'px', format: pdfSizeFormat, orientation: 'portrait', hotfixes: ['px_scaling'] },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
     };
 
