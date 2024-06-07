@@ -242,14 +242,14 @@ function handleConversionMeds(conversions) {
             Object.keys(genericConvItems).forEach(dc => {
                 const obj = {};
                 obj['drugCode'] = dc;
-                obj['composition'] = capitaliseComposition(genericConvItems[dc].f_comp);
-                let rate = Math.ceil(Number(genericConvItems[dc].price));
+                obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
+                let rate = Math.ceil(Number(genericConvItems[dc]?.price));
                 if(genericConvItems[dc].method === 'Tablet/Capsule') {
-                    rate *= Number(genericConvItems[dc].packet_digit);
+                    rate *= Number(genericConvItems[dc]?.packet_digit);
                 }
                 obj['rate'] = rate;
                 totalGenericRate += rate;
-                obj['packet'] = genericConvItems[dc].packet_digit + " " + genericConvItems[dc].packet_size;
+                obj['packet'] = genericConvItems[dc]?.packet_digit + " " + genericConvItems[dc]?.packet_size;
 
                 convObj['convItems'].push(obj);
             })
@@ -277,7 +277,7 @@ function handleConversionMeds(conversions) {
 
     // Create and push the HTML script to our index.html
     let mainDivs = "";
-    convertedMeds.forEach((convMed, idx) => {
+    convertedMeds.forEach((convMed) => {
         let convGenericItemDivs = "";
 
         convMed.convItems.forEach((genericItem, idx) => {
