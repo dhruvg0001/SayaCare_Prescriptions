@@ -473,7 +473,7 @@ footer {
 }
 
 .notePts {
-    margin-left: 5ch;
+    margin-left: 1.5ch;
     margin-top: 1rem;
 }
 
@@ -525,6 +525,10 @@ footer {
 
     .medList .row, .medList header {
         grid-template-columns: 2fr 4.5fr;
+    }
+
+    .notePts {
+        margin-left: 5ch;
     }
 }
 
