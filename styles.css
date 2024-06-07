@@ -325,6 +325,7 @@
 
 div.brandName {
     color: var(--text-dark-grey);
+    text-align: center;
 }
 
 .brandName span {
