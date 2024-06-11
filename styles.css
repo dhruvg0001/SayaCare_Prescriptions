@@ -243,7 +243,7 @@
 .row+.row::before {
     content: "";
     position: absolute;
-    width: 200vw;
+    /* width: 200vw; */
     left: -50%;
     right: -50%;
     top: -1.2rem;
