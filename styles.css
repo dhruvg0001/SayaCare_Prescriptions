@@ -236,7 +236,7 @@
 }
 
 .row {
-    margin-block: 1.5rem;
+    margin-block: 1.2rem;
     position: relative;
 }
 
@@ -582,6 +582,10 @@ footer {
 
     .notePts {
         margin-left: 5ch;
+    }
+
+    .row {
+        margin-block: 1.5rem;
     }
 }
 
