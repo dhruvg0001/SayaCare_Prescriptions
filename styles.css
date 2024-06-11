@@ -245,6 +245,7 @@
     position: absolute;
     width: 200vw;
     left: -50%;
+    right: -50%;
     top: -1.2rem;
     border-top: var(--column-border);
     border-color: var(--row-separator-color);
