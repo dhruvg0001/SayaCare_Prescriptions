@@ -63,8 +63,6 @@ async function getPrescription() {
         // Assign the key and value to the result object
         queryParams[key] = isNaN(value) ? value : Number(value); // Convert to number if possible
     });
-
-    console.log({queryParams})
     
     // Get the prescription data from backend
     const body = {
@@ -139,8 +137,6 @@ function populateView(data) {
     document.querySelectorAll('.medList main').forEach(mainDiv => {
         mainDiv.remove();
     });
-    
-    console.log({conversions, generic_order})
 
     if (conversions) handleConversionMeds(conversions);
 
@@ -159,8 +155,6 @@ function populateView(data) {
 }
 
 function handleGenericMeds(generic_order) {
-    console.log({inventoryByDC})
-
     // From the product list fetch DC info and put it in the generic order
     Object.keys(generic_order).forEach(dc => {
         const origObj = generic_order[dc];
@@ -169,9 +163,7 @@ function handleGenericMeds(generic_order) {
             generic_order[dc] = { ...origObj, ...invObj };
         }
     })
-
-    console.log("HANDLE GENERIC: ", generic_order)
-
+    
     const genericMeds = []; // Array after processing and extracting requiured information
     Object.keys(generic_order).forEach(dc => {
         const origObj = generic_order[dc];
