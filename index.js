@@ -162,6 +162,7 @@ function populateView(data) {
 }
 
 function handleGenericMeds(generic_order) {
+    console.log({inventoryByDC})
 
     // From the product list fetch DC info and put it in the generic order
     Object.keys(generic_order).forEach(dc => {
