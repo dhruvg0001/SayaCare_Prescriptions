@@ -272,20 +272,16 @@
 .medList header .brandName,
 .medList header .sayacareSubstitute,
 .medList header .dcHeading {
-    /* font-size: 1rem; */
     font-weight: 600;
 }
 
 
 .sayacareSubstitute,
 .dcHeading {
-    margin-block: auto 0.3rem;
     display: flex;
+    justify-content: center;
     gap: 0.2rem;
-    width: max-content;
     margin-inline: auto;
-    padding: 0.2rem 0.5rem;
-    /* font-size: 1rem; */
     font-weight: 400;
     color: #232323;
 }
@@ -311,14 +307,6 @@
     padding: 1rem;
 }
 
-/* .col1.empty {
-    display: none;
-} */
-
-.brandName {
-    margin: auto;
-}
-
 div.brandName {
     color: var(--text-dark-grey);
     text-align: center;
@@ -330,9 +318,11 @@ div.brandName {
 }
 
 .col23 {
-    display: flex;
+    /* display: flex; */
     gap: var(--column-gap);
     width: 100%;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
 }
 
 .col23 .unavailable {
@@ -364,9 +354,10 @@ div.brandName {
     background-color: #6BBE63;
     color: white;
     padding: 0.2rem 0.5rem;
-    line-height: 1rem;
+    line-height: var(--text-font-size);
     border-radius: 0.5rem 0 0 0.5rem;
     font-weight: 300;
+    width: max-content !important;
 }
 
 .convGenericItem {
@@ -469,6 +460,27 @@ div.brandName {
     color: rgb(71, 71, 71);
 }
 
+.col1 > *, .col2 > *, .col3 > * {
+    width: 100%;
+}
+
+/* General styling to ensure word wrap */
+.col1, .col2, .col3 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Additional styling for header text */
+header .col1, header .col2, header .col3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
 .unavailable {
     color: #ED273D !important;
 }
@@ -565,6 +577,7 @@ footer {
     .totalSavings {
         padding: 0.3rem 0.8rem;
         font-size: 0.8rem;
+        line-height: 1rem;
     }
     
     .logo img {
