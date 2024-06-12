@@ -318,7 +318,6 @@ div.brandName {
 }
 
 .col23 {
-    /* display: flex; */
     gap: var(--column-gap);
     width: 100%;
     display: grid;
