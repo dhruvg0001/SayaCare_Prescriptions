@@ -142,6 +142,8 @@ function populateView(data) {
     document.querySelectorAll('.medList main').forEach(mainDiv => {
         mainDiv.remove();
     });
+    
+    console.log({conversions, generic_order})
 
     if (conversions) handleConversionMeds(conversions);
 

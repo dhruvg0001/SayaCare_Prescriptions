@@ -7,7 +7,6 @@ export function setItem(key, value) {
     try {
         localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-        alert('Error setting item to localStorage:', JSON.stringify(error))
         console.error('Error setting item to localStorage:', error);
     }
 }
@@ -18,7 +17,6 @@ export function getItem(key) {
         const value = localStorage.getItem(key);
         return value ? JSON.parse(value) : null;
     } catch (error) {
-        alert('Error getting item to localStorage:', JSON.stringify(error))
         console.error('Error getting item from localStorage:', error);
         return null;
     }
@@ -29,7 +27,6 @@ export function removeItem(key) {
     try {
         localStorage.removeItem(key);
     } catch (error) {
-        alert('Error removing item to localStorage:', JSON.stringify(error));
         console.error('Error removing item from localStorage:', error);
     }
 }
@@ -39,7 +36,6 @@ export function clearStorage() {
     try {
         localStorage.clear();
     } catch (error) {
-        alert('Error clearing localStorage:', JSON.stringify(error));
         console.error('Error clearing localStorage:', error);
     }
 }
@@ -67,7 +63,6 @@ export async function checkCache() {
             return map;
         }, {});
     } catch (error) {
-        alert('Error checking cache:', JSON.stringify(error));
         console.error("Error while checking cache", error);
         return {}; // Return empty object
     }
@@ -104,11 +99,9 @@ async function cacheInventory() {
 
               setItem('inventory', obj);
         } else {
-            alert('Couuld not fetch prooduct list from backend', JSON.stringify(error));
             console.error("Could not fetch product list from the backend");
         }
     } catch (error) {
-        alert('Error while fetching product list', JSON.stringify(error));
         console.error("Error while fetching product list") 
     }
 } 
