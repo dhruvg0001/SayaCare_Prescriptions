@@ -172,6 +172,8 @@ function handleGenericMeds(generic_order) {
         }
     })
 
+    console.log("HANDLE GENERIC: ", generic_order)
+
     const genericMeds = []; // Array after processing and extracting requiured information
     Object.keys(generic_order).forEach(dc => {
         const origObj = generic_order[dc];
