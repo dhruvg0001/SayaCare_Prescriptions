@@ -45,6 +45,7 @@ export async function checkCache() {
         let cacheList = getItem('inventory');
         if(!cacheList) {
             await cacheInventory();
+            cacheList = getItem('inventory');
         } else {
             // If 1 day has passed then we will refetch the cache
             let current_date = Date.now();
@@ -53,7 +54,7 @@ export async function checkCache() {
 
             if (no_of_days > 1) {
                 await cacheInventory();
-                cacheList = getItem('inventory')
+                cacheList = getItem('inventory');
             }
         }
         // Return entry by drugcode for faster matching
