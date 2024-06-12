@@ -37,7 +37,7 @@ function extractPdf() {
     // Convert screen dimensions to jsPDF units (pixels)
     const pdfWidth = screenWidth;
 
-    const pdfSizeFormat = pdfWidth <= 640 ? 'b6' : 'b3';
+    const pdfSizeFormat = pdfWidth <= 640 ? 'a6' : 'b3';
 
     var options = {
         margin: [20, 20, 20, 20],
