@@ -9,9 +9,6 @@ const medListDiv = dataReadySection.querySelector('.medList');
 
 // Check if inventory cache is available
 let inventoryByDC = {};
-checkCache().then(inv => {
-    inventoryByDC = inv;
-});
 
 function extractPdf() {
     const navbarDiv = dataReadySection.querySelector('#navbar').cloneNode(true);
@@ -458,6 +455,11 @@ function main() {
     dataNotReadySection.style.display = 'block';
     dataReadySection.style.display = 'none';
 
-    getPrescription();
+    // Validate the product list cache and the get details from the backend
+    checkCache().then(inv => {
+        inventoryByDC = inv;
+        getPrescription();
+    });
+
 }
 main();
