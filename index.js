@@ -37,7 +37,7 @@ function extractPdf() {
     // Convert screen dimensions to jsPDF units (pixels)
     const pdfWidth = screenWidth;
 
-    const pdfSizeFormat = pdfWidth <= 640 ? 'government-letter' : 'b3';
+    const pdfSizeFormat = pdfWidth <= 640 ? 'legal' : 'b3';
 
     var options = {
         margin: [20, 20, 20, 20],
