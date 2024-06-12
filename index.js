@@ -54,13 +54,25 @@ async function getPrescription() {
     // get phone number and id from url params
     const queryString = decodeURIComponent(window.location.search);
 
-    const idFromParams = queryString
-        .split('/')[0]
-        .replace('?', '')
+    // Remove the leading "?" and split the string by "&"
+    const pairs = queryString.substring(1).split("&");
 
+    // Initialize an empty object to store the key-value pairs
+    const queryParams = {};
+
+    // Loop through each pair and split by "=" to get the key and value
+    pairs.forEach(pair => {
+        const [key, value] = pair.split("=");
+        // Assign the key and value to the result object
+        queryParams[key] = isNaN(value) ? value : Number(value); // Convert to number if possible
+    });
+
+    console.log({queryParams})
+    
     // Get the prescription data from backend
     const body = {
-        id: Number(idFromParams)
+        id: Number(queryParams.id),
+        phone_number: "+" + queryParams.phone,
     }
     const response = await fetch(`https://samasya.tech/api/prescription_system/object`, {
         method: "POST",
