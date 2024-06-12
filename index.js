@@ -34,7 +34,7 @@ function extractPdf() {
     // Convert screen dimensions to jsPDF units (pixels)
     const pdfWidth = screenWidth;
 
-    const pdfSizeFormat = pdfWidth <= 640 ? 'c5' : 'b3';
+    const pdfSizeFormat = pdfWidth <= 640 ? 'a5' : 'b3';
 
     var options = {
         margin: [20, 20, 20, 20],
@@ -163,7 +163,7 @@ function handleGenericMeds(generic_order) {
             generic_order[dc] = { ...origObj, ...invObj };
         }
     })
-    
+
     const genericMeds = []; // Array after processing and extracting requiured information
     Object.keys(generic_order).forEach(dc => {
         const origObj = generic_order[dc];
