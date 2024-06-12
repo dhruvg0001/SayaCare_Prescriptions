@@ -331,6 +331,7 @@ div.brandName {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     font-weight: 400;
     font-size: var(--text-font-size);
 }
