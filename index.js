@@ -77,6 +77,8 @@ async function getPrescription() {
         },
     });
     const data = await response.json();
+    console.log('data',data)
+    
 
     if (data['data'] && data['data'].length > 0) {
         // After Data is finished fetching - hide the NOT READY section and show the READY section
@@ -167,9 +169,12 @@ function handleGenericMeds(generic_order) {
     const genericMeds = []; // Array after processing and extracting requiured information
     Object.keys(generic_order).forEach(dc => {
         const origObj = generic_order[dc];
+        console.log('dcccccccccccccccccc',dc)
         const obj = {};
         obj['drugCode'] = origObj['drugCode'];
         obj['composition'] = capitaliseComposition(origObj['f_comp']);
+        obj['compositionName'] = capitaliseComposition(origObj['name']);
+
         if (origObj['method'].toLowerCase().includes('tablet')) {
             obj['rate'] = Number(origObj['price']) * Number(origObj['packet_digit']) * origObj['quantity'];
         } else {
@@ -183,12 +188,24 @@ function handleGenericMeds(generic_order) {
         })
 
         genericMeds.push(obj);
+        
     })
 
+
+    ///// done till toggling and active deactive
+
     // ADD THE GENERIC ITEMS TO THE DOM
-    
+    // Generic compostion name
     let mainDivs = "";
     genericMeds.forEach((genMed) => {
+        let genericCompositionSpan = "";
+    if (genMed.compositionName.trim !== genMed.composition) {
+        genericCompositionSpan = `
+            <span id="generic-comp-${genMed.drugCode}" class="compositionName" style="display:none;">
+                ${genMed.composition}
+            </span>
+        `;
+    }
         const mainDiv = `
                 <main class="row">
                     <div class="col1"><div class="brandName unavailable">N/A</div></div>
@@ -196,10 +213,14 @@ function handleGenericMeds(generic_order) {
                     <div class="col23">
                         <div class="col2">
                             <div class="convGenericItem">
-                                <div class="compUnit"><span id="comp">${genMed.composition}</span> | <span id="unitMethod">${genMed.packet}</span></div>
+                            <div class="compUnit">
+                            <span id="compositionName-${genMed.drugCode}" style="color:blue" class="compLink">${genMed.compositionName}</span> | 
+                            <span id="unitMethod">${genMed.packet}</span>
+                        </div>
                                 <div class="price">₹&nbsp;<span id="rate">${genMed.rate}</span>/-</div>
                                 ${genMed.dosageText ? `<div class="freqAdvice">${genMed['dosageText']}</div>` : ''}
                             </div>
+                            ${genericCompositionSpan}
                         </div>
         
                         <div class="col3">
@@ -213,9 +234,36 @@ function handleGenericMeds(generic_order) {
         mainDivs += mainDiv;
     })
     medListDiv.insertAdjacentHTML('beforeend', mainDivs);
+
+    
+
+    // Attach event listeners to each composition link after the HTML is added to the DOM
+    genericMeds.forEach((genMed) => {
+        const compositionNameSpan = document.getElementById(`compositionName-${genMed.drugCode}`);
+        const genericCompositionSpan = document.getElementById(`generic-comp-${genMed.drugCode}`);
+    
+        compositionNameSpan.addEventListener('click', () => {
+            // Toggle the visibility of the composition name
+            if(genericCompositionSpan){
+
+            if (genericCompositionSpan.style.display === 'none') {
+                genericCompositionSpan.style.display = 'inline';
+                compositionNameSpan.style.color='purple'
+                
+            } else {
+                genericCompositionSpan.style.display = 'none';
+                compositionNameSpan.style.color = 'blue'
+            }
+        }
+
+        });
+    });
 }
 
+
+
 function handleConversionMeds(conversions) {
+    
     const convertedMeds = []; // Array after processing and extracting requiured information
 
     // From the product list fetch DC info and put it in the branded order
@@ -229,13 +277,13 @@ function handleConversionMeds(conversions) {
             conversions[brandName].Conversions = changedConversions
         }
     })
-
     // Traverse on each conversion item and extract required info
     Object.keys(conversions).forEach(brandName => {
         const convObj = {};
         const comp = capitaliseComposition(conversions[brandName].Comp);
         convObj['composition'] = comp;
-
+        const orignalBrandName = capitaliseComposition(brandName);
+        convObj['orignalBrandName'] = orignalBrandName;
         let brandedPrice = Math.ceil(Number(conversions[brandName].Price))
         convObj['MRP'] = conversions[brandName].Price ? Math.ceil(Number(conversions[brandName].Price)) : 'N/A';
         if (convObj['MRP'] === 'N/A') {
@@ -251,7 +299,9 @@ function handleConversionMeds(conversions) {
                 if(!genericConvItems[dc]) return;
                 const obj = {};
                 obj['drugCode'] = dc;
+                // conversion converted compostion name
                 obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
+                obj['convertedName'] = capitaliseComposition(genericConvItems[dc]?.name)
                 let rate = Math.ceil(Number(genericConvItems[dc]?.price));
                 if(genericConvItems[dc].method === 'Tablet/Capsule') {
                     rate *= Number(genericConvItems[dc]?.packet_digit);
@@ -286,30 +336,55 @@ function handleConversionMeds(conversions) {
 
     // Create and push the HTML script to our index.html
     let mainDivs = "";
+    console.log('convertedMeds',convertedMeds)
     convertedMeds.forEach((convMed) => {
         let convGenericItemDivs = "";
-
+        // coverted compostion here 
         convMed.convItems.forEach((genericItem, idx) => {
+            let conversionCompositionSpan = "";
+            if (genericItem.convertedName !== genericItem.composition) {
+                conversionCompositionSpan = `
+                <span id="composition-${genericItem.drugCode}" style="display:none;">${genericItem.composition}</span>
+                `;
+            }
             convGenericItemDivs += `
                 <div class="convGenericItem">
-                    <div class="compUnit"><span id="comp">${genericItem.composition}</span> | <span id="unitMethod">${genericItem.packet}</span></div>
+                    <div class="compUnit"><span id="comp-${genericItem.drugCode}" style="color:blue" class="compLink">${genericItem.convertedName}</span>  | <span id="unitMethod">${genericItem.packet}</span></div>
+                  
                     <div class="price">₹&nbsp;<span id="rate">${genericItem.rate}</span>/-</div>
                     ${idx === convMed.convItems.length - 1 && convMed.dosageText ? `<div class="freqAdvice">${convMed['dosageText']}</div>` : ''}
                 </div>
+                <div>
+                ${conversionCompositionSpan}
+                </div>
+                
             `
         })
+        
+        let conversionBrandNameSpan =""        
+            if (convMed.orignalBrandName !== convMed.composition) {
+                conversionBrandNameSpan = `
+                <span id="brand-comp-${convMed.orignalBrandName}" class="compositionToggle" style="display:none;">
+                    ${convMed.composition}
+                </span>
+                `;
+            }
 
-        let convGenericDrugCodeDivs = "";
-        convMed.convItems.forEach(genericItem => {
+            let convGenericDrugCodeDivs = "";
+            convMed.convItems.forEach(genericItem => {
             convGenericDrugCodeDivs += `
-                <div class="drugCode">${genericItem.drugCode}</div>
-            `
-        })
-
+            <div class="drugCode">${genericItem.drugCode}</div>
+        `
+            })
+   // conversion block when generic =null and conversion 
+//    converted Brand Name
         const mainDiv = `
+
             <main class="row">
                 <div class="col1">
-                    <div class="brandName">${convMed.composition} <span class="mrp ${convMed.MRP === 'N/A' ? 'unavailable' : '' }">(${convMed.MRP !== 'N/A' ? '₹&nbsp;' + convMed.MRP + '/-' : 'N/A'})</span></div>
+                    <div class="brandName"> <span  style="color:blue;" id="brand-${convMed.orignalBrandName}" class="brandNameToggle">${convMed.orignalBrandName}</span> <span class="mrp ${convMed.MRP === 'N/A' ? 'unavailable' : '' }">(${convMed.MRP !== 'N/A' ? '₹&nbsp;' + convMed.MRP + '/-' : 'N/A'})</span>
+                    ${conversionBrandNameSpan}
+                    </div>
                 </div>
 
                 <div class="col23">
@@ -337,6 +412,51 @@ function handleConversionMeds(conversions) {
         mainDivs += mainDiv
     })
     medListDiv.insertAdjacentHTML('beforeend', mainDivs);
+
+    // Attach event listeners to each converted name span
+    convertedMeds.forEach(convMed => {
+        convMed.convItems.forEach(genericItem => {
+            const compLink = document.getElementById(`comp-${genericItem.drugCode}`);
+            const compositionSpan = document.getElementById(`composition-${genericItem.drugCode}`);
+
+            compLink.addEventListener('click', () => {
+                // Toggle the visibility of the composition name
+                if(compositionSpan){
+                if (compositionSpan.style.display === 'none') {
+                    compositionSpan.style.display = 'inline';
+                    compLink.style.color='purple'
+                } else {
+                    compositionSpan.style.display = 'none';
+                    compLink.style.color='blue'
+                }
+            }
+            });
+        });
+    });
+
+    // medListDiv = document.getElementById('medListDiv');
+
+    // Attach event listeners to each brand name span
+    Object.keys(conversions).forEach(brandName => {
+        const brandNameCaps = capitaliseComposition(brandName)
+        const brandLink = document.getElementById(`brand-${brandNameCaps}`);
+        const brandCompSpan = document.getElementById(`brand-comp-${brandNameCaps}`);
+        brandLink.addEventListener('click', () => {
+            // Toggle the visibility of the composition for the brand name
+            if(brandCompSpan){
+
+          
+            if (brandCompSpan.style.display === 'none') {
+                brandCompSpan.style.display = 'inline';
+                brandLink.style.color = 'purple'
+            } else {
+                brandCompSpan.style.display = 'none';
+                brandLink.style.color= 'blue'
+            }
+        }
+        });
+    });
+    
 }
 
 /** Bunch of Utility Functions */

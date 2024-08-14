@@ -555,6 +555,14 @@ footer {
     max-width: 72rem;
 }
 
+.brandNameToggle{
+    cursor: pointer;
+}
+
+.compLink{
+    cursor: pointer;
+}
+
 /* Responsive Styles */
 
 /* small screens */
