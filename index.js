@@ -77,7 +77,6 @@ async function getPrescription() {
         },
     });
     const data = await response.json();
-    console.log('data',data)
     
 
     if (data['data'] && data['data'].length > 0) {
@@ -169,7 +168,6 @@ function handleGenericMeds(generic_order) {
     const genericMeds = []; // Array after processing and extracting requiured information
     Object.keys(generic_order).forEach(dc => {
         const origObj = generic_order[dc];
-        console.log('dcccccccccccccccccc',dc)
         const obj = {};
         obj['drugCode'] = origObj['drugCode'];
         obj['composition'] = capitaliseComposition(origObj['f_comp']);
@@ -336,7 +334,6 @@ function handleConversionMeds(conversions) {
 
     // Create and push the HTML script to our index.html
     let mainDivs = "";
-    console.log('convertedMeds',convertedMeds)
     convertedMeds.forEach((convMed) => {
         let convGenericItemDivs = "";
         // coverted compostion here 
