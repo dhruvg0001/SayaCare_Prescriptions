@@ -233,6 +233,8 @@ function handleConversionMeds(conversions) {
     // Traverse on each conversion item and extract required info
     Object.keys(conversions).forEach(brandName => {
         const convObj = {};
+        const tempBrandName=brandName.split('_')
+        convObj.brandName = tempBrandName[0]
         const comp = capitaliseComposition(conversions[brandName].Comp);
         convObj['composition'] = comp;
 
@@ -309,7 +311,7 @@ function handleConversionMeds(conversions) {
         const mainDiv = `
             <main class="row">
                 <div class="col1">
-                    <div class="brandName">${convMed.composition} <span class="mrp ${convMed.MRP === 'N/A' ? 'unavailable' : '' }">(${convMed.MRP !== 'N/A' ? '₹&nbsp;' + convMed.MRP + '/-' : 'N/A'})</span></div>
+                    <div class="brandName">${convMed.brandName} <span class="mrp ${convMed.MRP === 'N/A' ? 'unavailable' : '' }">(${convMed.MRP !== 'N/A' ? '₹&nbsp;' + convMed.MRP + '/-' : 'N/A'})</span></div>
                 </div>
 
                 <div class="col23">
