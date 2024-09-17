@@ -115,8 +115,9 @@ function populateView(data) {
 
     // Add the date of upload
     const dateUpload = formatDateFromTimestamp(TOC);
-    const uploadDateDiv = document.querySelector('.uploadDate');
-    uploadDateDiv.querySelector('.data').innerHTML = dateUpload;
+    const dateSpan = document.getElementById('TOC');
+    dateSpan.innerHTML = dateUpload;
+
 
     // Add pharmacist name, parchi ID, date of transcribing
     const pharmacistNameSpan = document.getElementById('pharmacistName');
