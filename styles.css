@@ -555,6 +555,12 @@ footer {
     max-width: 72rem;
 }
 
+.packetSizeWarning{
+    font-size: .8rem;
+    color: var(--text-light-grey);
+    padding-top: .15rem
+}
+
 /* Responsive Styles */
 
 /* small screens */

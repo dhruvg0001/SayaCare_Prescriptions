@@ -255,15 +255,16 @@ function handleConversionMeds(conversions) {
                 const obj = {};
                 obj['drugCode'] = dc;
                 obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
-                let rate = Math.ceil(Number(genericConvItems[dc]?.price));
+                let rate = Number(genericConvItems[dc]?.price);
                 if(genericConvItems[dc].method === 'Tablet/Capsule') {
                     rate *= Number(genericConvItems[dc]?.packet_digit);
                 }
-                obj['rate'] = rate;
+                obj['rate'] = Math.ceil(rate);
                 totalGenericRate += rate;
                 obj['packet'] = genericConvItems[dc]?.packet_digit + " " + genericConvItems[dc]?.packet_size;
 
                 convObj['convItems'].push(obj);
+                console.log('rate we are checking',rate);
             })
 
             if (brandedPrice !== 'N/A') {
