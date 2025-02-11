@@ -247,7 +247,7 @@
     right: -50%;
     top: -1.2rem;
     border-top: var(--column-border);
-    border-color: var(--row-separator-color);
+    /* border-color: var(--row-separator-color); */
 }
 
 .row:first-child {
