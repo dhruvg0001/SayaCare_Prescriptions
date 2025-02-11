@@ -300,7 +300,9 @@
 }
 
 .col1:has(div.brandName) {
-    background-color: var(--bg-light-grey);
+    /* background-color: var(--bg-light-grey); */
+    border-color: var(--bg-light-grey);
+   
 }
 
 .col1>div {
@@ -637,6 +639,7 @@ padding: 2rem 2rem 1.6rem 2rem;
 .savingDiv{
     display: flex;
     align-items: center;
+    font-weight: 600;
     /* justify-content: center; */
 }
 

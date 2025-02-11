@@ -9,6 +9,8 @@ const medListDiv = dataReadySection.querySelector('.medList');
 
 // Check if inventory cache is available
 let inventoryByDC = {};
+let overAllSavings=0;
+let numberOfItems = 0
 
 function extractPdf() {
     const navbarDiv = dataReadySection.querySelector('#navbar').cloneNode(true);
@@ -218,6 +220,7 @@ function handleGenericMeds(generic_order) {
 
 function handleConversionMeds(conversions) {
     const convertedMeds = []; // Array after processing and extracting requiured information
+    console.log('conversionssssssssssssssss',conversions)
 
     // From the product list fetch DC info and put it in the branded order
     Object.keys(conversions).forEach(brandName => {
@@ -271,6 +274,9 @@ function handleConversionMeds(conversions) {
                 const savedAmount = brandedPrice - totalGenericRate;
                 const savePerc = Math.round(savedAmount / brandedPrice * 100);
                 convObj['totalSavings'] = savePerc + "%";
+                numberOfItems+=1
+                overAllSavings = overAllSavings + savePerc
+                
             } else {
                 convObj['totalSavings'] = 'N/A';
             }
@@ -285,6 +291,10 @@ function handleConversionMeds(conversions) {
 
         convertedMeds.push(convObj);
     })
+
+    overAllSavings = overAllSavings/numberOfItems
+    document.getElementById('saving').innerText = `${Math.ceil(overAllSavings)}%`
+    console.log('overAllSavings',overAllSavings)
 
     // ADD THE BRANDED ITEMS TO THE DOM
 
