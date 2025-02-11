@@ -242,7 +242,7 @@ function handleConversionMeds(conversions) {
         const comp = capitaliseComposition(conversions[brandName].Comp);
         convObj['composition'] = comp;
 
-        let brandedPrice = Math.ceil(Number(conversions[brandName].Price))
+        let brandedPrice = parseFloat(Number(conversions[brandName].Price)/Number(conversions[brandName].Digit_Packet))
         convObj['MRP'] = conversions[brandName].Price ? Math.ceil(Number(conversions[brandName].Price)) : 'N/A';
         if (convObj['MRP'] === 'N/A') {
             brandedPrice = 'N/A';
@@ -253,6 +253,7 @@ function handleConversionMeds(conversions) {
         const genericConvItems = conversions[brandName].Conversions;
         if (genericConvItems) {
             let totalGenericRate = 0;
+            let perPacketRate=0
             Object.keys(genericConvItems).forEach(dc => {
                 if(!genericConvItems[dc]) return;
                 const obj = {};
@@ -260,10 +261,12 @@ function handleConversionMeds(conversions) {
                 obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
                 let rate = Number(genericConvItems[dc]?.price);
                 if(genericConvItems[dc].method === 'Tablet/Capsule') {
+                    perPacketRate = rate  * 1;
                     rate *= Number(genericConvItems[dc]?.packet_digit);
+                    
                 }
-                obj['rate'] = Math.ceil(rate);
-                totalGenericRate += rate;
+                obj['rate'] = parseFloat(rate);
+                totalGenericRate += perPacketRate;
                 obj['packet'] = genericConvItems[dc]?.packet_digit + " " + genericConvItems[dc]?.packet_size;
 
                 convObj['convItems'].push(obj);
@@ -272,7 +275,7 @@ function handleConversionMeds(conversions) {
 
             if (brandedPrice !== 'N/A') {
                 const savedAmount = brandedPrice - totalGenericRate;
-                const savePerc = Math.round(savedAmount / brandedPrice * 100);
+                const savePerc = Math.floor(savedAmount / brandedPrice * 100);
                 convObj['totalSavings'] = savePerc + "%";
                 numberOfItems+=1
                 overAllSavings = overAllSavings + savePerc
