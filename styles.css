@@ -461,13 +461,15 @@ div.brandName {
     font-family: 'Poppins';
     color: #646565;
     font-size: .8rem;
-    margin-left: 14rem;
+    margin-left: 2rem;
 }
-.contactImage{
+.contactImage {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    padding: 2rem;
+    margin-left: 6rem;
     align-items: center;
-    gap: 3px;
+    gap: .8rem
 }
 
 .icon {
@@ -645,7 +647,13 @@ padding: 2rem 2rem 1.6rem 2rem;
 
 .ticketDiv{
     display: flex;
+    font-weight: 600;
     /* align-items: center; */
+}
+
+.highlightSavings{
+ color: #F37323;
+ font-size: 1rem;
 }
 
 .savingImg{
@@ -669,6 +677,11 @@ padding: 2rem 2rem 1.6rem 2rem;
     margin-top: .5rem;
 }
 
+.contactDiv{
+    margin: 2rem 0rem 2rem 0;
+    background-color: #f2f2f2;
+}
+
 /* Responsive Styles */
 
 /* small screens */
@@ -678,6 +691,67 @@ padding: 2rem 2rem 1.6rem 2rem;
     }
     .logo img {
         height: 5rem;
+    }
+
+    .iconText {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center; 
+        gap: 0.5rem;
+    }
+
+    .iconTextImg {
+        margin-right: 1rem;
+    }
+}
+
+
+
+
+@media (max-width: 768px) {
+
+    .iconText {
+        /* display: flex; */
+        flex-wrap: wrap;
+        /* align-items: center;  */
+        /* gap: 0.5rem; */
+    }
+
+    .iconTextImg {
+        margin-right: 1rem;
+    }
+
+    .icon{
+        height: 1.8rem;
+    }
+    .text{
+        font-size: .5rem;
+    }
+    .placeOrderFooter{
+        margin-left: 0;
+    }
+    .contactInfo{
+        gap: 1rem;
+    }
+    .info{
+        flex-wrap: wrap;
+
+    }
+    .otherInfo{
+        margin-top: 1rem;
+        padding: 1.5rem 1.5rem 1.1rem 1.5rem;
+    }
+
+    .substituteText {
+        font-size: 7pt;
+    }
+
+    .packetSizeWarning {
+        font-size: .5rem;
+    }
+
+    .useApplyspan{
+        margin-top: .25rem;
     }
 }
 
@@ -732,6 +806,8 @@ padding: 2rem 2rem 1.6rem 2rem;
     .price {
         margin-right: 10%;
     }
+
+  
 }
 
 /* extra large screens */

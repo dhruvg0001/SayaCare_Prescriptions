@@ -229,6 +229,7 @@ function handleConversionMeds(conversions) {
         if (origConversions) {
             Object.keys(origConversions).forEach(dc => {
                 changedConversions[dc] = inventoryByDC[dc];
+                changedConversions[dc]['ratio'] = origConversions[dc]
             })
             conversions[brandName].Conversions = changedConversions
         }
@@ -261,7 +262,7 @@ function handleConversionMeds(conversions) {
                 obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
                 let rate = Number(genericConvItems[dc]?.price);
                 if(genericConvItems[dc].method === 'Tablet/Capsule') {
-                    perPacketRate = rate  * 1;
+                    perPacketRate = rate  * genericConvItems[dc].ratio;
                     rate *= Number(genericConvItems[dc]?.packet_digit);
                     
                 }
