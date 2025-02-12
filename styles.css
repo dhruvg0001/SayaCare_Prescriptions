@@ -198,7 +198,7 @@
 
 .pharmacistInfo {
     width: 100%;
-    background-color: var(--bg-dark-grey);
+    /* background-color: var(--bg-dark-grey); */
     color: var(--text-light-grey);
     font-size: var(--text-font-size);
     font-weight: 300;
@@ -247,7 +247,7 @@
     right: -50%;
     top: -1.2rem;
     border-top: var(--column-border);
-    border-color: var(--row-separator-color);
+    /* border-color: var(--row-separator-color); */
 }
 
 .row:first-child {
@@ -300,7 +300,9 @@
 }
 
 .col1:has(div.brandName) {
-    background-color: var(--bg-light-grey);
+    /* background-color: var(--bg-light-grey); */
+    border-color: var(--bg-light-grey);
+   
 }
 
 .col1>div {
@@ -368,6 +370,7 @@ div.brandName {
     height: 100%;
     padding: 1rem;
     position: relative;
+    border: 1px solid #F37323;
 }
 
 .convGenericItem+.convGenericItem::before {
@@ -429,15 +432,44 @@ div.brandName {
     justify-content: space-between;
     padding-inline: 10%;
     position: relative;
-    margin-block: 3rem 2rem;
+    /* margin-block: 3rem 2rem; */
     background: #FFF6EE;
     padding-block: 0.6rem;
+}
+
+
+
+.contactMain{
+    margin-block: 3rem 2rem;
+    background: #FFF6EE;
+    padding: 1rem 0 1rem 0;
 }
 
 .iconText {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.iconTextImg{
+    margin-right: 9rem;
+}
+.placeOrderFooter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins';
+    color: #646565;
+    font-size: .8rem;
+    margin-left: 2rem;
+}
+.contactImage {
+    display: flex;
+    /* justify-content: center; */
+    padding: 2rem;
+    margin-left: 6rem;
+    align-items: center;
+    gap: .8rem
 }
 
 .icon {
@@ -448,6 +480,43 @@ div.brandName {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.iconWhatsapp{
+    color: white;
+    border-radius: 100%;
+    aspect-ratio: 1;
+    height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F37323;
+}
+
+.substituteText{
+    font-family: 'Poppins';
+    font-size: 8.5pt;
+    font-style: italic;
+}
+
+.testHaiText{
+    display: flex;
+    justify-content: flex-end;
+    margin: 3rem;
+}
+
+.testedHai{
+    font-family: "Poppins", sans-serif;
+    /* font-weight: 15; */
+    color: #1883c1;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.bhrosaHai{
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: italic;
+    color: #f37323;
 }
 
 .icon img {
@@ -555,10 +624,62 @@ footer {
     max-width: 72rem;
 }
 
+
+
 .packetSizeWarning{
-    font-size: .8rem;
+    font-size: .7rem;
     color: var(--text-light-grey);
     padding-top: .15rem
+}
+
+.otherInfo{
+background-color: #FEF8E2;
+/* background-color: rgb(57, 7, 7); */
+padding: 2rem 2rem 1.6rem 2rem;
+}
+
+.savingDiv{
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    /* justify-content: center; */
+}
+
+.ticketDiv{
+    display: flex;
+    font-weight: 600;
+    /* align-items: center; */
+}
+
+.highlightSavings{
+ color: #F37323;
+ font-size: 1rem;
+}
+
+.savingImg{
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.highlightText{
+    color: #F37323;
+}
+.learnMoreText{
+    color: #F37323;
+    text-decoration: underline;
+}
+
+.learnMoreDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: .5rem;
+}
+
+.contactDiv{
+    margin: 2rem 0rem 2rem 0;
+    background-color: #f2f2f2;
 }
 
 /* Responsive Styles */
@@ -570,6 +691,67 @@ footer {
     }
     .logo img {
         height: 5rem;
+    }
+
+    .iconText {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center; 
+        gap: 0.5rem;
+    }
+
+    .iconTextImg {
+        margin-right: 1rem;
+    }
+}
+
+
+
+
+@media (max-width: 768px) {
+
+    .iconText {
+        /* display: flex; */
+        flex-wrap: wrap;
+        /* align-items: center;  */
+        /* gap: 0.5rem; */
+    }
+
+    .iconTextImg {
+        margin-right: 1rem;
+    }
+
+    .icon{
+        height: 1.8rem;
+    }
+    .text{
+        font-size: .5rem;
+    }
+    .placeOrderFooter{
+        margin-left: 0;
+    }
+    .contactInfo{
+        gap: 1rem;
+    }
+    .info{
+        flex-wrap: wrap;
+
+    }
+    .otherInfo{
+        margin-top: 1rem;
+        padding: 1.5rem 1.5rem 1.1rem 1.5rem;
+    }
+
+    .substituteText {
+        font-size: 7pt;
+    }
+
+    .packetSizeWarning {
+        font-size: .5rem;
+    }
+
+    .useApplyspan{
+        margin-top: .25rem;
     }
 }
 
@@ -624,6 +806,8 @@ footer {
     .price {
         margin-right: 10%;
     }
+
+  
 }
 
 /* extra large screens */
