@@ -85,6 +85,7 @@ async function cacheInventory() {
                 ) {
                   if (item.trade) {
                     let price = ((parseFloat(item.price) / item.packet_digit) * parseInt(item.trade.packet_digit)).toFixed(2);
+                    item.packet_digit = parseInt(item.trade.packet_digit).toFixed(2);
                     item.price = price.toString();
                   }
                 }

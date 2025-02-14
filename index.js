@@ -235,6 +235,10 @@ function handleConversionMeds(conversions) {
         }
     })
 
+    let brand_arr = []
+    let gener_arr = []
+
+
     // Traverse on each conversion item and extract required info
     Object.keys(conversions).forEach(brandName => {
         const convObj = {};
@@ -248,26 +252,33 @@ function handleConversionMeds(conversions) {
         if (convObj['MRP'] === 'N/A') {
             brandedPrice = 'N/A';
         }
+        brand_arr.push(brandedPrice)
 
         // Extract info for each converted generic item
         convObj['convItems'] = [];
         const genericConvItems = conversions[brandName].Conversions;
         if (genericConvItems) {
             let totalGenericRate = 0;
-            let perPacketRate=0
+
+
             Object.keys(genericConvItems).forEach(dc => {
                 if(!genericConvItems[dc]) return;
+                let perPacketRate=0
                 const obj = {};
                 obj['drugCode'] = dc;
                 obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
                 let rate = Number(genericConvItems[dc]?.price);
                 if(genericConvItems[dc].method === 'Tablet/Capsule') {
-                    perPacketRate = rate  * genericConvItems[dc].ratio;
                     rate *= Number(genericConvItems[dc]?.packet_digit);
-                    
+                    obj['rate'] = parseFloat(rate);
+                    perPacketRate = Number(genericConvItems[dc]?.price)*genericConvItems[dc].ratio;
+                } else {
+                    obj['rate'] = parseFloat(rate);
+                    perPacketRate = Number(genericConvItems[dc]?.price)/Number(genericConvItems[dc]?.packet_digit)**genericConvItems[dc].ratio 
                 }
-                obj['rate'] = parseFloat(rate);
+
                 totalGenericRate += perPacketRate;
+                gener_arr.push(perPacketRate)
                 obj['packet'] = genericConvItems[dc]?.packet_digit + " " + genericConvItems[dc]?.packet_size;
 
                 convObj['convItems'].push(obj);
@@ -279,12 +290,17 @@ function handleConversionMeds(conversions) {
                 const savePerc = Math.floor(savedAmount / brandedPrice * 100);
                 convObj['totalSavings'] = savePerc + "%";
                 numberOfItems+=1
-                overAllSavings = overAllSavings + savePerc
                 
             } else {
                 convObj['totalSavings'] = 'N/A';
             }
         }
+        let brand_sum =0
+        brand_arr.forEach(num => brand_sum += num);
+        let gen_sum = 0 
+        gener_arr.forEach(num => gen_sum += num);
+
+        overAllSavings = Math.floor((brand_sum - gen_sum)/brand_sum *100)
 
 
         // CONVERT DOSAGES TO HUMAN UNDERSTABLE TEXT LIKE: BD ---> 1 tablet 2 times a day.
@@ -296,7 +312,6 @@ function handleConversionMeds(conversions) {
         convertedMeds.push(convObj);
     })
 
-    overAllSavings = overAllSavings/numberOfItems
     document.getElementById('saving').innerText = `${Math.ceil(overAllSavings)}%`
     console.log('overAllSavings',overAllSavings)
 
