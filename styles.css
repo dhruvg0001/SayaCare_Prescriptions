@@ -218,17 +218,17 @@
     color: var(--text-dark-grey);
 }
 
-.pharmacist .label {
+/* .pharmacist .label {
     font-weight: 400;
     color: var(--text-dark-grey);
-}
+} */
 
-.parchiId {
+.parchiId .data {
     color: var(--text-dark-grey);
     font-weight: 400;
 }
 
-.parchiPhoneNumber{
+.parchiPhoneNumber .data{
     color: var(--text-dark-grey);
     font-weight: 400;
 }
