@@ -122,6 +122,12 @@ function populateView(data) {
 
 
     // Add pharmacist name, parchi ID, date of transcribing
+    const parchiIdSpan = document.getElementById('parchiId');
+    parchiIdSpan.innerText = id;
+
+    const parchiNumberSpan = document.getElementById('parchiPhoneNumber');
+    parchiNumberSpan.innerText = phone_number;
+
     const pharmacistNameSpan = document.getElementById('pharmacistName');
     if(!transcriber) {
         pharmacistNameSpan.innerHTML = `<span class='unavailable'>N/A</span>`
@@ -129,8 +135,7 @@ function populateView(data) {
         getTranscriber(transcriber, pharmacistNameSpan);
     }
     
-    const parchiIdSpan = document.getElementById('parchiId');
-    parchiIdSpan.innerText = id;
+    
 
     const dateTranscribe = formatDateFromTimestamp(TOP);
     const dateOfTranscriptionDiv = document.querySelector('.dateOfTranscription');
