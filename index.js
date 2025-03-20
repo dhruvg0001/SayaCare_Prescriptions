@@ -179,7 +179,7 @@ function handleGenericMeds(generic_order) {
         obj['drugCode'] = origObj['drugCode'];
         obj['composition'] = capitaliseComposition(origObj['f_comp']);
         if (origObj['method'].toLowerCase().includes('tablet')) {
-            obj['rate'] = Number(origObj['price']) * Number(origObj['packet_digit']) * origObj['quantity'];
+            obj['rate'] = Number(origObj['price']) * Number(origObj['trade']['packet_digit']) * origObj['quantity'];
         } else {
             obj['rate'] = Number(origObj['price']) * origObj['quantity'];
         }
