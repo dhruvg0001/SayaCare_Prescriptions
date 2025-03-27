@@ -185,7 +185,7 @@ function handleGenericMeds(generic_order) {
         // } else {
         //     obj['rate'] = Number(origObj['price']) * origObj['quantity'];
         // }
-        // obj['packet'] = origObj['trade']['packet_digit'] + ' ' + origObj['packet_size'];
+        obj['packet'] = origObj['packet'];
         obj['dosageText'] = formatDosageFreqAdviceText({
             advice: origObj['advice'],
             frequency: origObj['frequency'],
