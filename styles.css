@@ -214,12 +214,23 @@
 
 .pharmacist .data {
     font-weight: 400;
+   
     color: var(--text-dark-grey);
 }
 
-.parchiId {
+/* .pharmacist .label {
+    font-weight: 400;
     color: var(--text-dark-grey);
-    font-weight: 600;
+} */
+
+.parchiId .data {
+    color: var(--text-dark-grey);
+    font-weight: 400;
+}
+
+.parchiPhoneNumber .data{
+    color: var(--text-dark-grey);
+    font-weight: 400;
 }
 
 .dateOfTranscription span {
@@ -312,6 +323,8 @@
 div.brandName {
     color: var(--text-dark-grey);
     text-align: center;
+    background-color: rgba(254, 248, 226, 0.3); /* 30% opacity */
+
 }
 
 .brandName span {
@@ -370,7 +383,7 @@ div.brandName {
     height: 100%;
     padding: 1rem;
     position: relative;
-    border: 1px solid #F37323;
+    border: 1px solid #1883C1;
 }
 
 .convGenericItem+.convGenericItem::before {

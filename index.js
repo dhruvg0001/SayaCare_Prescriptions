@@ -1,4 +1,4 @@
-import { checkCache } from './localStorageUtils.js';
+// import { checkCache } from './localStorageUtils.js';
 
 /**
  * REQUIED HTML ELEMENTS
@@ -71,7 +71,7 @@ async function getPrescription() {
         id: Number(queryParams.id),
         phone_number: "+" + queryParams.phone,
     }
-    const response = await fetch(`https://samasya.tech/api/prescription_system/object`, {
+    const response = await fetch(`https://samasya.tech/api/prescription_system/detail`, {
         method: "POST",
         body: JSON.stringify(body),
         headers: {
@@ -80,7 +80,7 @@ async function getPrescription() {
     });
     const data = await response.json();
 
-    if (data['data'] && data['data'].length > 0) {
+    if (data['data']) {
         // After Data is finished fetching - hide the NOT READY section and show the READY section
         dataNotReadySection.style.display = 'none';
         dataReadySection.style.display = 'block';
@@ -91,7 +91,7 @@ async function getPrescription() {
             extractPdf();
         })
 
-        populateView(data['data'][0]);
+        populateView(data['data']);
     }
 }
 
@@ -122,6 +122,12 @@ function populateView(data) {
 
 
     // Add pharmacist name, parchi ID, date of transcribing
+    const parchiIdSpan = document.getElementById('parchiId');
+    parchiIdSpan.innerText = id;
+
+    const parchiNumberSpan = document.getElementById('parchiPhoneNumber');
+    parchiNumberSpan.innerText = phone_number;
+
     const pharmacistNameSpan = document.getElementById('pharmacistName');
     if(!transcriber) {
         pharmacistNameSpan.innerHTML = `<span class='unavailable'>N/A</span>`
@@ -129,12 +135,12 @@ function populateView(data) {
         getTranscriber(transcriber, pharmacistNameSpan);
     }
     
-    const parchiIdSpan = document.getElementById('parchiId');
-    parchiIdSpan.innerText = id;
+    
 
     const dateTranscribe = formatDateFromTimestamp(TOP);
     const dateOfTranscriptionDiv = document.querySelector('.dateOfTranscription');
     dateOfTranscriptionDiv.innerHTML = `On <span>${dateTranscribe}</span>`;
+    document.getElementById('saving').innerText = `${Math.ceil(data.overall_discount)}%`
 
     // Clear any skeleton loaded/dummy medlist html scripts
     document.querySelectorAll('.medList main').forEach(mainDiv => {
@@ -163,7 +169,7 @@ function handleGenericMeds(generic_order) {
         const origObj = generic_order[dc];
         const invObj = inventoryByDC[dc];
         if (invObj) {
-            generic_order[dc] = { ...origObj, ...invObj };
+            generic_order[dc] = { ...origObj};
         }
     })
 
@@ -171,14 +177,15 @@ function handleGenericMeds(generic_order) {
     Object.keys(generic_order).forEach(dc => {
         const origObj = generic_order[dc];
         const obj = {};
-        obj['drugCode'] = origObj['drugCode'];
-        obj['composition'] = capitaliseComposition(origObj['f_comp']);
-        if (origObj['method'].toLowerCase().includes('tablet')) {
-            obj['rate'] = Number(origObj['price']) * Number(origObj['packet_digit']) * origObj['quantity'];
-        } else {
-            obj['rate'] = Number(origObj['price']) * origObj['quantity'];
-        }
-        obj['packet'] = origObj['packet_digit'] + ' ' + origObj['packet_size'];
+        obj['drugCode'] = dc;
+        obj['composition'] = capitaliseComposition(origObj['generic_name']);
+        obj['rate'] = origObj['rate']
+        // if (origObj['method'].toLowerCase().includes('tablet')) {
+        //     obj['rate'] = Number(origObj['price']) * Number(origObj['trade']['packet_digit']) * origObj['quantity'];
+        // } else {
+        //     obj['rate'] = Number(origObj['price']) * origObj['quantity'];
+        // }
+        obj['packet'] = origObj['packet'];
         obj['dosageText'] = formatDosageFreqAdviceText({
             advice: origObj['advice'],
             frequency: origObj['frequency'],
@@ -227,13 +234,17 @@ function handleConversionMeds(conversions) {
         const changedConversions = {}, origConversions = conversions[brandName].Conversions;
 
         if (origConversions) {
-            Object.keys(origConversions).forEach(dc => {
-                changedConversions[dc] = inventoryByDC[dc];
-                changedConversions[dc]['ratio'] = origConversions[dc]
-            })
-            conversions[brandName].Conversions = changedConversions
+            // Object.keys(origConversions).forEach(dc => {
+            //     changedConversions[dc] = inventoryByDC[dc];
+            //     changedConversions[dc]['ratio'] = origConversions[dc]
+            // })
+            conversions[brandName].Conversions = origConversions
         }
     })
+
+    // let brand_arr = []
+    // let gener_arr = []
+
 
     // Traverse on each conversion item and extract required info
     Object.keys(conversions).forEach(brandName => {
@@ -248,43 +259,64 @@ function handleConversionMeds(conversions) {
         if (convObj['MRP'] === 'N/A') {
             brandedPrice = 'N/A';
         }
+        // brand_arr.push(brandedPrice)
 
         // Extract info for each converted generic item
         convObj['convItems'] = [];
         const genericConvItems = conversions[brandName].Conversions;
         if (genericConvItems) {
             let totalGenericRate = 0;
-            let perPacketRate=0
+
+
             Object.keys(genericConvItems).forEach(dc => {
                 if(!genericConvItems[dc]) return;
+                let perPacketRate=0
                 const obj = {};
                 obj['drugCode'] = dc;
-                obj['composition'] = capitaliseComposition(genericConvItems[dc]?.f_comp);
-                let rate = Number(genericConvItems[dc]?.price);
-                if(genericConvItems[dc].method === 'Tablet/Capsule') {
-                    perPacketRate = rate  * genericConvItems[dc].ratio;
-                    rate *= Number(genericConvItems[dc]?.packet_digit);
-                    
-                }
-                obj['rate'] = parseFloat(rate);
-                totalGenericRate += perPacketRate;
-                obj['packet'] = genericConvItems[dc]?.packet_digit + " " + genericConvItems[dc]?.packet_size;
+                obj['composition'] = capitaliseComposition(genericConvItems[dc]?.drugInfo.generic_name);
+                obj['rate'] = Number(genericConvItems[dc].drugInfo?.rate);
+                // if(genericConvItems[dc].method === 'Tablet/Capsule') {
+                //     rate *= Number(genericConvItems[dc]?.packet_digit);
+                //     obj['rate'] = parseFloat(rate);
+                //     perPacketRate = Number(genericConvItems[dc]?.price)*genericConvItems[dc].ratio;
+                // } else {
+                //     obj['rate'] = parseFloat(rate);
+                //     perPacketRate = Number(genericConvItems[dc]?.price)/Number(genericConvItems[dc]?.packet_digit)**genericConvItems[dc].ratio 
+                // }
+
+                // totalGenericRate += perPacketRate;
+                // gener_arr.push(perPacketRate)
+                obj['packet'] = genericConvItems[dc]?.drugInfo.packet_digit + " " + genericConvItems[dc]?.drugInfo.packet_size;
 
                 convObj['convItems'].push(obj);
-                console.log('rate we are checking',rate);
+                // console.log('rate we are checking',rate);
             })
 
-            if (brandedPrice !== 'N/A') {
-                const savedAmount = brandedPrice - totalGenericRate;
-                const savePerc = Math.floor(savedAmount / brandedPrice * 100);
-                convObj['totalSavings'] = savePerc + "%";
-                numberOfItems+=1
-                overAllSavings = overAllSavings + savePerc
+            // if (brandedPrice !== 'N/A') {
+            //     const savedAmount = brandedPrice - totalGenericRate;
+            //     const savePerc = Math.floor(savedAmount / brandedPrice * 100);
+            //     convObj['totalSavings'] = savePerc + "%";
+            //     numberOfItems+=1
+                
+            // } else {
+            //     convObj['totalSavings'] = 'N/A';
+            // }
+
+            if (conversions[brandName].discount) {
+                convObj['totalSavings']  = `${conversions[brandName].discount}%`
                 
             } else {
                 convObj['totalSavings'] = 'N/A';
             }
+
+            
         }
+        // let brand_sum =0
+        // brand_arr.forEach(num => brand_sum += num);
+        // let gen_sum = 0 
+        // gener_arr.forEach(num => gen_sum += num);
+
+        // overAllSavings = Math.floor((brand_sum - gen_sum)/brand_sum *100)
 
 
         // CONVERT DOSAGES TO HUMAN UNDERSTABLE TEXT LIKE: BD ---> 1 tablet 2 times a day.
@@ -296,8 +328,7 @@ function handleConversionMeds(conversions) {
         convertedMeds.push(convObj);
     })
 
-    overAllSavings = overAllSavings/numberOfItems
-    document.getElementById('saving').innerText = `${Math.ceil(overAllSavings)}%`
+    
     console.log('overAllSavings',overAllSavings)
 
     // ADD THE BRANDED ITEMS TO THE DOM
@@ -464,12 +495,14 @@ function main() {
     // Initially show loader/data not ready screen and hide the data ready screen
     dataNotReadySection.style.display = 'block';
     dataReadySection.style.display = 'none';
+    getPrescription();
 
     // Validate the product list cache and the get details from the backend
-    checkCache().then(inv => {
-        inventoryByDC = inv;
-        getPrescription();
-    });
+
+    // checkCache().then(inv => {
+    //     inventoryByDC = inv;
+        
+    // });
 
 }
 main();
