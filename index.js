@@ -6,6 +6,8 @@
 const dataReadySection = document.getElementById('data-ready')
 const dataNotReadySection = document.getElementById('data-not-ready')
 const medListDiv = dataReadySection.querySelector('.medList');
+const mainSection= document.getElementById('main');
+const noDataSection= document.getElementById('noData');
 
 // Check if inventory cache is available
 let inventoryByDC = {};
@@ -80,10 +82,11 @@ async function getPrescription() {
     });
     const data = await response.json();
 
-    if (data['data']) {
+    if (data['data'] ) {
         // After Data is finished fetching - hide the NOT READY section and show the READY section
         dataNotReadySection.style.display = 'none';
         dataReadySection.style.display = 'block';
+        noDataSection.style.display = 'none'
 
         // Add a click listener to the Download PDF button
         const exportButton = document.querySelector(".exportBtn");
@@ -92,6 +95,12 @@ async function getPrescription() {
         })
 
         populateView(data['data']);
+    }
+    else{
+        dataNotReadySection.style.display = 'block';
+        dataReadySection.style.display = 'none';
+        mainSection.style.display = 'none'
+        noDataSection.style.display = 'block'
     }
 }
 
