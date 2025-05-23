@@ -228,6 +228,13 @@
     font-weight: 400;
 }
 
+#noData{
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+}
+
 .parchiPhoneNumber .data{
     color: var(--text-dark-grey);
     font-weight: 400;
