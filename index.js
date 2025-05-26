@@ -82,7 +82,7 @@ async function getPrescription() {
     });
     const data = await response.json();
 
-    if (data['data'] ) {
+    if (data['data'] && data['data'].length > 0) {
         // After Data is finished fetching - hide the NOT READY section and show the READY section
         dataNotReadySection.style.display = 'none';
         dataReadySection.style.display = 'block';
