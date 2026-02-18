@@ -14,6 +14,9 @@ let inventoryByDC = {};
 let overAllSavings=0;
 let numberOfItems = 0
 
+// Prescription advice lookup map (fetched from API)
+let adviceLookup = { Dosage: {}, Frequency: {}, Meals: {}, Route: {} };
+
 function extractPdf() {
     const navbarDiv = dataReadySection.querySelector('#navbar').cloneNode(true);
     const mainDiv = dataReadySection.querySelector('#main').cloneNode(true);
@@ -51,6 +54,25 @@ function extractPdf() {
     html2pdf(tempContainerDiv, options)
 }
 
+async function fetchAdviceLookup() {
+    try {
+        const response = await fetch(`https://samasya.tech/api/prescription-advice/grouped`);
+        const result = await response.json();
+        if (result.success && result.data) {
+            // Build lookup maps: { "od": "Once daily", "bd": "Twice daily", ... }
+            for (const category of ['Dosage', 'Frequency', 'Meals', 'Route']) {
+                if (result.data[category]) {
+                    result.data[category].forEach(entry => {
+                        adviceLookup[category][entry.item.toLowerCase()] = entry.interpretation;
+                    });
+                }
+            }
+        }
+    } catch (err) {
+        console.error('Failed to fetch prescription advice lookup:', err);
+    }
+}
+
 async function getPrescription() {
     // get phone number and id from url params
     const queryString = decodeURIComponent(window.location.search);
@@ -67,22 +89,25 @@ async function getPrescription() {
         // Assign the key and value to the result object
         queryParams[key] = isNaN(value) ? value : Number(value); // Convert to number if possible
     });
-    
-    // Get the prescription data from backend
+
+    // Get the prescription data and advice lookup in parallel
     const body = {
         id: Number(queryParams.id),
         phone_number: "+" + queryParams.phone,
     }
-    const response = await fetch(`https://samasya.tech/api/prescription_system/detail`, {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+    const [response] = await Promise.all([
+        fetch(`https://samasya.tech/api/prescription_system/detail`, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }),
+        fetchAdviceLookup()
+    ]);
     const data = await response.json();
 
-    if (data['data'] ) {
+    if (data['data']) {
         // After Data is finished fetching - hide the NOT READY section and show the READY section
         dataNotReadySection.style.display = 'none';
         dataReadySection.style.display = 'block';
@@ -195,37 +220,46 @@ function handleGenericMeds(generic_order) {
         //     obj['rate'] = Number(origObj['price']) * origObj['quantity'];
         // }
         obj['packet'] = origObj['packet'];
-        obj['dosageText'] = formatDosageFreqAdviceText({
-            advice: origObj['advice'],
+        obj['TI'] = origObj['TI'];
+        obj['dosageDetails'] = formatDosageDetails({
+            dosage: origObj['dosage'],
             frequency: origObj['frequency'],
-            dosage: origObj['dosage']
-        })
+            advice: origObj['advice'],
+            meals: origObj['meals'] || origObj['Meals'],
+            quantity: origObj['quantity'] || origObj['Quantity'],
+            route: origObj['route'] || origObj['Route'],
+        });
 
         genericMeds.push(obj);
     })
 
     // ADD THE GENERIC ITEMS TO THE DOM
-    
+
     let mainDivs = "";
     genericMeds.forEach((genMed) => {
+        let dosageDetailsHtml = genMed.dosageDetails ? `<div class="dosage-details">${genMed.dosageDetails}</div>` : '';
+
         const mainDiv = `
                 <main class="row">
                     <div class="col1"><div class="brandName unavailable">N/A</div></div>
-        
+
                     <div class="col23">
                         <div class="col2">
                             <div class="convGenericItem">
                                 <div class="compUnit"><span id="comp">${genMed.composition}</span> | <span id="unitMethod">${genMed.packet}</span></div>
                                 <div class="price">₹&nbsp;<span id="rate">${genMed.rate}</span>/-</div>
-                                ${genMed.dosageText ? `<div class="freqAdvice">${genMed['dosageText']}</div>` : ''}
+                            </div>
+                            ${dosageDetailsHtml}
+                        </div>
+
+                        <div class="col3">
+                            <div class="drugCode">
+                                ${genMed.drugCode}
+                                ${genMed.TI === "0" ? '<div class="out-of-stock">OUT OF STOCK</div>' : ''}
                             </div>
                         </div>
-        
-                        <div class="col3">
-                            <div class="drugCode">${genMed.drugCode}</div>
-                        </div>
                     </div>
-        
+
                 </main>
             `
 
@@ -296,6 +330,7 @@ function handleConversionMeds(conversions) {
                 // totalGenericRate += perPacketRate;
                 // gener_arr.push(perPacketRate)
                 obj['packet'] = genericConvItems[dc]?.drugInfo.packet_digit + " " + genericConvItems[dc]?.drugInfo.packet_size;
+                obj['TI'] = genericConvItems[dc]?.TI;
 
                 convObj['convItems'].push(obj);
                 // console.log('rate we are checking',rate);
@@ -328,10 +363,14 @@ function handleConversionMeds(conversions) {
         // overAllSavings = Math.floor((brand_sum - gen_sum)/brand_sum *100)
 
 
-        // CONVERT DOSAGES TO HUMAN UNDERSTABLE TEXT LIKE: BD ---> 1 tablet 2 times a day.
-        convObj['dosageText'] = formatDosageFreqAdviceText({
-            // Add frequency, advice -- NEED TO CONFIRM THE KEY NAMES FOR THESE
-            dosage: conversions[brandName].Dosage
+        // Build dosage details from all 6 fields
+        convObj['dosageDetails'] = formatDosageDetails({
+            dosage: conversions[brandName].Dosage,
+            frequency: conversions[brandName].Frequency,
+            advice: conversions[brandName].Advice,
+            meals: conversions[brandName].Meals,
+            quantity: conversions[brandName].Quantity,
+            route: conversions[brandName].Route,
         });
 
         convertedMeds.push(convObj);
@@ -347,20 +386,24 @@ function handleConversionMeds(conversions) {
     convertedMeds.forEach((convMed) => {
         let convGenericItemDivs = "";
 
-        convMed.convItems.forEach((genericItem, idx) => {
+        convMed.convItems.forEach((genericItem) => {
             convGenericItemDivs += `
                 <div class="convGenericItem">
                     <div class="compUnit"><span id="comp">${genericItem.composition}</span> | <span id="unitMethod">${genericItem.packet}</span></div>
                     <div class="price">₹&nbsp;<span id="rate">${genericItem.rate}</span>/-</div>
-                    ${idx === convMed.convItems.length - 1 && convMed.dosageText ? `<div class="freqAdvice">${convMed['dosageText']}</div>` : ''}
                 </div>
             `
         })
 
+        let dosageDetailsHtml = convMed.dosageDetails ? `<div class="dosage-details">${convMed.dosageDetails}</div>` : '';
+
         let convGenericDrugCodeDivs = "";
         convMed.convItems.forEach(genericItem => {
             convGenericDrugCodeDivs += `
-                <div class="drugCode">${genericItem.drugCode}</div>
+                <div class="drugCode">
+                    ${genericItem.drugCode}
+                    ${genericItem.TI === "0" ? '<div class="out-of-stock">OUT OF STOCK</div>' : ''}
+                </div>
             `
         })
 
@@ -372,13 +415,14 @@ function handleConversionMeds(conversions) {
 
                 <div class="col23">
                     ${
-                        !convGenericItemDivs 
+                        !convGenericItemDivs
                         ? '<div class="unavailable">Conversion not available/Schedule X- not for sale</div>'
                         : `
                             <div class="col2">
                                 ${!convMed.totalSavings || convMed.totalSavings === 'N/A' ? 'Conversion not available/Schedule X- not for sale' : `<div class="totalSavings"><div>${convMed.totalSavings}</div> Saved</div>`}
-                                
+
                                 ${convGenericItemDivs}
+                                ${dosageDetailsHtml}
                             </div>
 
                             <div class="col3">
@@ -386,7 +430,7 @@ function handleConversionMeds(conversions) {
                             </div>
                         `
                     }
-                    
+
                 </div>
 
             </main>
@@ -431,56 +475,66 @@ function capitaliseComposition(composition) {
     return words.join(" + ");
 }
 
-function formatDosageFreqAdviceText(infoObj) {
+function formatDosageDetails(infoObj) {
     if(!infoObj) return "";
 
-    let {dosage, advice, frequency} = infoObj;
-    
-    const strs = [];
+    const { dosage, frequency, advice, meals, quantity, route } = infoObj;
+    const parts = [];
+
+    // Dosage
     if (dosage) {
-        dosage = dosage.toLowerCase();
-        if (!isNaN(Number(dosage[0]))) {
-            // 1-0-0, 1-0-1-2 form
-            const splitByHyphen = dosage.split('-');
-
+        const key = dosage.toLowerCase();
+        const interpretation = adviceLookup.Dosage[key];
+        if (interpretation) {
+            parts.push(interpretation);
+        } else if (!isNaN(Number(key[0]))) {
+            // Handle numeric pattern like 1-0-1
+            const splitByHyphen = key.split('-');
             let daysForIdx = [];
-            if (splitByHyphen.length === 4) {
-                daysForIdx = ['morning', 'afternoon', 'evening', 'night'];
-            } else if (splitByHyphen.length === 3) {
-                daysForIdx = ['morning', 'afternoon', 'evening'];
-            } else if (splitByHyphen.length === 2) {
-                daysForIdx = ['morning', 'evening']
-            }
+            if (splitByHyphen.length === 4) daysForIdx = ['morning', 'afternoon', 'evening', 'night'];
+            else if (splitByHyphen.length === 3) daysForIdx = ['morning', 'afternoon', 'evening'];
+            else if (splitByHyphen.length === 2) daysForIdx = ['morning', 'evening'];
 
-            let strs = [];
+            const strs = [];
             for (let i = 0; i < splitByHyphen.length; i++) {
                 if (splitByHyphen[i] !== '0') {
                     const tablet = splitByHyphen[i] === '1' ? 'tablet' : 'tablets';
                     strs.push(`${splitByHyphen[i]} ${tablet} in the ${daysForIdx[i]}`);
                 }
             }
-
-            return strs.length > 0 ? 'Take ' + strs.join(', ') : undefined;
-        } else {
-            // od, tds, bd
-            const dosageToText = {
-                od: "Take 1 tablet once a day",
-                bd: "Take 1 tablet 2 times in a day",
-                tds: "Take 1 tablet 3 times in a day",
-            }
-            return dosageToText[dosage];
+            if (strs.length > 0) parts.push('Take ' + strs.join(', '));
         }
     }
 
+    // Frequency
     if (frequency) {
-        strs.push(`every ${frequency} ${frequency == '1' ? 'day' : 'days'}`);
+        const interpretation = adviceLookup.Frequency[frequency.toLowerCase()];
+        parts.push(interpretation || frequency);
     }
 
+    // Days (Advice)
     if (advice) {
-        strs.push(`for ${advice} ${advice == '1' ? 'day' : 'days'}`);
+        parts.push(`For ${advice} ${advice == 1 ? 'day' : 'days'}`);
     }
 
-    return strs.length > 0 ? 'Take ' + strs.join(', ') : undefined;
+    // Meals
+    if (meals) {
+        const interpretation = adviceLookup.Meals[meals.toLowerCase()];
+        parts.push(interpretation || meals);
+    }
+
+    // Quantity
+    if (quantity) {
+        parts.push(`Qty: ${quantity}`);
+    }
+
+    // Route (skip if null/empty)
+    if (route) {
+        const interpretation = adviceLookup.Route[route.toLowerCase()];
+        parts.push(interpretation || route);
+    }
+
+    return parts.length > 0 ? parts.join(' &nbsp;|&nbsp; ') : "";
 }
 
 async function getTranscriber(transcriber, pharmacistNameSpan) {

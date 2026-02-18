@@ -427,6 +427,14 @@ div.brandName {
     letter-spacing: 0.6px;
 }
 
+.dosage-details {
+    font-size: 0.55rem;
+    color: var(--text-light-grey);
+    padding: 0.3rem 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.3px;
+}
+
 .col3 {
     display: flex;
     font-size: var(--text-font-size);
@@ -443,8 +451,20 @@ div.brandName {
 .col3>div {
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.out-of-stock {
+    color: white;
+    background-color: #D32F2F;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-top: 0.3rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
 }
 
 .contactInfo {
