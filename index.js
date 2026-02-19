@@ -174,7 +174,11 @@ function populateView(data) {
     const dateTranscribe = formatDateFromTimestamp(TOP);
     const dateOfTranscriptionDiv = document.querySelector('.dateOfTranscription');
     dateOfTranscriptionDiv.innerHTML = `On <span>${dateTranscribe}</span>`;
-    document.getElementById('saving').innerText = `(${Math.ceil(data.overall_discount)}%)`
+    if (data.overall_discount < 0) {
+        document.querySelector('.savingDiv').style.display = 'none';
+    } else {
+        document.getElementById('saving').innerText = `(${Math.ceil(data.overall_discount)}%)`
+    }
 
     // Calculate saved amount
     let totalBrandPrice = 0;
