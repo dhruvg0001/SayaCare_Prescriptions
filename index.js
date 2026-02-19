@@ -174,7 +174,34 @@ function populateView(data) {
     const dateTranscribe = formatDateFromTimestamp(TOP);
     const dateOfTranscriptionDiv = document.querySelector('.dateOfTranscription');
     dateOfTranscriptionDiv.innerHTML = `On <span>${dateTranscribe}</span>`;
-    document.getElementById('saving').innerText = `${Math.ceil(data.overall_discount)}%`
+    if (data.overall_discount < 0) {
+        document.querySelector('.savingDiv').style.display = 'none';
+    } else {
+        document.getElementById('saving').innerText = `(${Math.ceil(data.overall_discount)}%)`
+    }
+
+    // Calculate saved amount
+    let totalBrandPrice = 0;
+    let totalGenericPrice = 0;
+    if (conversions) {
+        Object.keys(conversions).forEach(brandName => {
+            const conv = conversions[brandName];
+            const brandP = parseFloat(conv.Price);
+            if (!isNaN(brandP)) totalBrandPrice += brandP;
+            const genericItems = conv.Conversions;
+            if (genericItems) {
+                Object.keys(genericItems).forEach(dc => {
+                    if (!genericItems[dc]) return;
+                    const rate = parseFloat(genericItems[dc]?.drugInfo?.rate);
+                    if (!isNaN(rate)) totalGenericPrice += rate;
+                });
+            }
+        });
+    }
+    const savedAmt = Math.round(totalBrandPrice - totalGenericPrice);
+    if (savedAmt > 0) {
+        document.getElementById('savedAmount').innerText = `₹ ${savedAmt}/-`;
+    }
 
     // Clear any skeleton loaded/dummy medlist html scripts
     document.querySelectorAll('.medList main').forEach(mainDiv => {
@@ -419,7 +446,7 @@ function handleConversionMeds(conversions) {
                         ? '<div class="unavailable">Conversion not available/Schedule X- not for sale</div>'
                         : `
                             <div class="col2">
-                                ${!convMed.totalSavings || convMed.totalSavings === 'N/A' ? 'Conversion not available/Schedule X- not for sale' : `<div class="totalSavings"><div>${convMed.totalSavings}</div> Saved</div>`}
+                                ${!convMed.totalSavings || convMed.totalSavings === 'N/A' ? 'Conversion not available/Schedule X- not for sale' : `<div class="totalSavings"><span class="savings-percent">${convMed.totalSavings}</span><span class="savings-label">Saved</span></div>`}
 
                                 ${convGenericItemDivs}
                                 ${dosageDetailsHtml}
