@@ -56,7 +56,7 @@ function extractPdf() {
 
 async function fetchAdviceLookup() {
     try {
-        const response = await fetch(`https://samasya.tech/api/prescription-advice/grouped`);
+        const response = await fetch(`https://staging.samasya.tech/api/prescription-advice/grouped`);
         const result = await response.json();
         if (result.success && result.data) {
             // Build lookup maps: { "od": "Once daily", "bd": "Twice daily", ... }
@@ -96,7 +96,7 @@ async function getPrescription() {
         phone_number: "+" + queryParams.phone,
     }
     const [response] = await Promise.all([
-        fetch(`https://samasya.tech/api/prescription_system/detail`, {
+        fetch(`https://staging.samasya.tech/api/prescription_system/detail`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -373,9 +373,9 @@ function handleConversionMeds(conversions) {
             //     convObj['totalSavings'] = 'N/A';
             // }
 
-            if (conversions[brandName].discount) {
+            if (conversions[brandName].discount && conversions[brandName].discount > 0) {
                 convObj['totalSavings']  = `${conversions[brandName].discount}%`
-                
+
             } else {
                 convObj['totalSavings'] = 'N/A';
             }
@@ -446,7 +446,7 @@ function handleConversionMeds(conversions) {
                         ? '<div class="unavailable">Conversion not available/Schedule X- not for sale</div>'
                         : `
                             <div class="col2">
-                                ${!convMed.totalSavings || convMed.totalSavings === 'N/A' ? 'Conversion not available/Schedule X- not for sale' : `<div class="totalSavings"><span class="savings-percent">${convMed.totalSavings}</span><span class="savings-label">Saved</span></div>`}
+                                ${convMed.totalSavings && convMed.totalSavings !== 'N/A' ? `<div class="totalSavings"><span class="savings-percent">${convMed.totalSavings}</span><span class="savings-label">Saved</span></div>` : ''}
 
                                 ${convGenericItemDivs}
                                 ${dosageDetailsHtml}
@@ -566,7 +566,7 @@ function formatDosageDetails(infoObj) {
 
 async function getTranscriber(transcriber, pharmacistNameSpan) {
     // get via API
-    const url = `https://samasya.tech/api/staff/info/${transcriber}`;
+    const url = `https://staging.samasya.tech/api/staff/info/${transcriber}`;
     const apiRes = await fetch(url);
     const res = await apiRes.json();
     if(!res['success']) {
