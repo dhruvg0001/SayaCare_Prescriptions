@@ -373,9 +373,9 @@ function handleConversionMeds(conversions) {
             //     convObj['totalSavings'] = 'N/A';
             // }
 
-            if (conversions[brandName].discount) {
+            if (conversions[brandName].discount && conversions[brandName].discount > 0) {
                 convObj['totalSavings']  = `${conversions[brandName].discount}%`
-                
+
             } else {
                 convObj['totalSavings'] = 'N/A';
             }
@@ -446,7 +446,7 @@ function handleConversionMeds(conversions) {
                         ? '<div class="unavailable">Conversion not available/Schedule X- not for sale</div>'
                         : `
                             <div class="col2">
-                                ${!convMed.totalSavings || convMed.totalSavings === 'N/A' ? 'Conversion not available/Schedule X- not for sale' : `<div class="totalSavings"><span class="savings-percent">${convMed.totalSavings}</span><span class="savings-label">Saved</span></div>`}
+                                ${convMed.totalSavings && convMed.totalSavings !== 'N/A' ? `<div class="totalSavings"><span class="savings-percent">${convMed.totalSavings}</span><span class="savings-label">Saved</span></div>` : ''}
 
                                 ${convGenericItemDivs}
                                 ${dosageDetailsHtml}
